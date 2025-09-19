@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import HearingProtectionPage from './pages/HearingProtectionPage';
 import TrainingPage from './pages/TrainingPage';
 import OffRoadTrainingDetailPage from './pages/OffRoadTrainingDetailPage';
+import RegistrationPage from './pages/RegistrationPage';
 import Footer from './components/Footer';
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/hearing-protection" element={<HearingProtectionPage />} />
           <Route path="/training" element={<TrainingPage />} />
           <Route path="/off-road-training-detail" element={<OffRoadTrainingDetailPage />} />
+          <Route path="/registration" element={<RegistrationPage />} />
           {/* Add more routes here as needed */}
         </Routes>
         <Footer/>

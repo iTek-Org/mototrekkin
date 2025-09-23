@@ -33,7 +33,7 @@ const bookingSchema = new mongoose.Schema({
   currentKms: { type: Number },
   lastServiceDate: { type: Date },
 
-  // Faults / problems
+  // problems
   ongoingFaults: { type: String, enum: ["yes", "no"], default: "no" },
   faultsDescription: { type: String },
 

@@ -30,6 +30,9 @@ import AdminDashboard from './pages/dashboard/AdminDashboard';
 
 
 
+
+
+
 const App = () => {
 
   // Scroll to top when component mounts
@@ -72,7 +75,8 @@ const App = () => {
 
            <Route path="/userdashboard" element={<UserDashboard />} />
            <Route path="admin/dashboard" element={<AdminDashboard />} />
-
+          
+             
 
         </Routes>
 

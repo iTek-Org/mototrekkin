@@ -6,6 +6,8 @@ import HearingProtectionPage from './pages/HearingProtectionPage';
 import TrainingPage from './pages/TrainingPage';
 import OffRoadTrainingDetailPage from './pages/OffRoadTrainingDetailPage';
 import RegistrationPage from './pages/RegistrationPage';
+import MDPPhase2RegistrationPage from './pages/MDPPhase2RegistrationPage';
+import MDPPhase3RegistrationPage from './pages/MDPPhase3RegistrationPage';
 import Footer from './components/Footer';
 
 const App = () => {
@@ -19,6 +21,8 @@ const App = () => {
           <Route path="/training" element={<TrainingPage />} />
           <Route path="/off-road-training-detail" element={<OffRoadTrainingDetailPage />} />
           <Route path="/registration" element={<RegistrationPage />} />
+          <Route path="/registration-mdp-phase-2" element={<MDPPhase2RegistrationPage />} />
+          <Route path="/registration-mdp-phase-3" element={<MDPPhase3RegistrationPage />} />
           {/* Add more routes here as needed */}
         </Routes>
         <Footer/>

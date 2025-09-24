@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, User, Mail, Phone, Calendar, MapPin, CreditCard, Star, AlertTriangle, Shield, Bike } from 'lucide-react';
+import imgCrf250 from '../assets/bikes/HONDA CRF250 RALLY.jpg';
+import imgBmw310 from '../assets/bikes/BMW 310 GS.jpg';
+import imgCb500x from '../assets/bikes/HONDA CB500X.jpg';
 
 const RegistrationPage = () => {
+  const location = useLocation();
+  // Detect phase from query string if present
+  const queryParams = new URLSearchParams(location.search);
+  const queryPhase = queryParams.get('phase');
   const [currentStep, setCurrentStep] = useState('form'); // 'form', 'experience', 'comprehensive', 'detailed', 'tyre', 'final', 'maintenance'
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
@@ -30,7 +37,7 @@ const RegistrationPage = () => {
     
     // Emergency Contacts
     emergency1: { firstName: '', lastName: '', email: '', mobile: '', landline: '', relationship: '' },
-    emergency2: { firstName: '', lastName: '', email: '', mobile: '', landline: '', relationship: '' },
+    // Removed secondary emergency contact
     shirtSize: '',
     
     // Medical Information
@@ -58,50 +65,16 @@ const RegistrationPage = () => {
     // New Experience Fields
     attendedTraining: '',
     recentTrainingSixMonths: '',
-    trainingDetails: '',
     offRoadExperienceDescription: '',
     ridingExperienceLevel: '',
     confidenceConcerns: '',
     
     // Training Date
-    trainingState: '',
-    trainingDate: '',
-    phase: '',
     completedPhase1: '',
     completedPhase2: '',
-    
-    // Accommodation
-    accommodationPreference: '',
-    groupMembers: '',
-    
-    // Non-riding Partner
-    hasPartner: '',
-    partnerName: '',
+    completedBothPhases: '',
     partnerMealPackage: '',
-    
-    // Bike Details
-    bikeChoice: '',
-    bikeMake: '',
-    bikeModel: '',
-    bikeYear: '',
-    bikeHire: '',
-    hireBike: '',
-    addOns: [],
-    
-    // License Details
-    licenseValid: '',
-    licenseNumber: '',
-    licenseExpiry: { day: '', month: '', year: '' },
-    licenseState: '',
-    
-    // Tyre Orders
-    requiresTyres: '',
-    frontTyre: { width: '', height: '', rim: '' },
-    rearTyre: { width: '', height: '', rim: '' },
-    preferredBrand: '',
-    secondBrand: '',
-    wheelType: '',
-    tyreManagement: '',
+    groupRiding: '',
     
     // Final Step - Terms and Payment
     termsAgreed: false,
@@ -110,17 +83,15 @@ const RegistrationPage = () => {
     giftVoucher: '',
     termsText: '',
     
-    // Comprehensive Form Fields
-    trainingDate: 'NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322',
-    groupRiding: '',
+    // Comprehensive Form Fields (final values)
+    trainingDate: (queryPhase === '2')
+      ? 'OCTOBER 24th + 25th + 26th Phase II Hunter Valley NSW 2322'
+      : 'NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322',
+    trainingState: 'HUNTER VALLEY NSW 2322',
+    phase: queryPhase === '2' ? '2' : '3',
     groupMembers: '',
     hasPartner: '',
     partnerName: '',
-    
-    // Detailed Form Fields
-    trainingState: 'HUNTER VALLEY NSW 2322',
-    phase: '3',
-    completedBothPhases: '',
     accommodationPreference: '',
     bikeChoice: '',
     bikeMake: '',
@@ -141,6 +112,63 @@ const RegistrationPage = () => {
     wheelType: '',
     tyreManagement: ''
   });
+
+  // Pricing constants and helpers
+  const TRAINING_FEE_PHASE2 = 990;
+  const TRAINING_FEE_PHASE3 = 1190;
+  const PARTNER_FEE = 149;
+  const NON_REFUNDABLE_DEPOSIT = 499;
+  const HIRE_DAYS = 2; // shown in UI
+  const MERCHANT_FEE_FULL = 29.75;
+  const MERCHANT_FEE_DEPOSIT = 9.33;
+
+  const formatCurrency = (amount) => `$${amount.toFixed(2)}`;
+
+  const getBikeDailyRate = () => {
+    if (!formData.hireBike) return 0;
+    const match = formData.hireBike.match(/\$([0-9]+)\/day/);
+    return match ? parseInt(match[1], 10) : 0;
+  };
+
+  const ADD_ON_RATES = {
+    excessReduction: 15,
+    tyreProtection: 15,
+    touringWindscreen: 5,
+    panniers: 15
+  };
+
+  const ADD_ON_LABELS = {
+    excessReduction: 'Excess Reduction',
+    tyreProtection: 'Tyre Protection',
+    touringWindscreen: 'Touring Windscreen (Tall)',
+    panniers: 'Panniers'
+  };
+
+  const getAddOnsDailyRate = () => {
+    if (!Array.isArray(formData.addOns)) return 0;
+    return formData.addOns.reduce((sum, key) => sum + (ADD_ON_RATES[key] || 0), 0);
+  };
+
+  const bikeHireTotal = getBikeDailyRate() * HIRE_DAYS;
+  const addOnsTotal = getAddOnsDailyRate() * HIRE_DAYS;
+  const partnerFee = formData.hasPartner === 'Yes' ? PARTNER_FEE : 0;
+  const trainingFee = formData.phase === '2' ? TRAINING_FEE_PHASE2 : TRAINING_FEE_PHASE3;
+  const subtotal = trainingFee + partnerFee + bikeHireTotal + addOnsTotal;
+  const fullPaymentTotal = subtotal + MERCHANT_FEE_FULL;
+  const depositPaymentTotal = NON_REFUNDABLE_DEPOSIT + MERCHANT_FEE_DEPOSIT;
+
+  // Bike image mapping and helpers for inline preview
+  const BIKE_IMAGES = {
+    'HONDA CRF250 RALLY': imgCrf250,
+    'BMW 310 GS': imgBmw310,
+    'HONDA CB500X': imgCb500x,
+  };
+
+  const getSelectedBikeInfo = () => {
+    if (!formData.hireBike) return null;
+    const name = formData.hireBike.split(' - ')[0];
+    return { name, src: BIKE_IMAGES[name] };
+  };
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -209,11 +237,7 @@ const RegistrationPage = () => {
     if (!formData.emergency1.email.trim()) newErrors['emergency1.email'] = 'This field is required.';
     if (!formData.emergency1.mobile.trim()) newErrors['emergency1.mobile'] = 'This field is required.';
     if (!formData.emergency1.relationship.trim()) newErrors['emergency1.relationship'] = 'This field is required.';
-    if (!formData.emergency2.firstName.trim()) newErrors['emergency2.firstName'] = 'This field is required.';
-    if (!formData.emergency2.lastName.trim()) newErrors['emergency2.lastName'] = 'This field is required.';
-    if (!formData.emergency2.email.trim()) newErrors['emergency2.email'] = 'This field is required.';
-    if (!formData.emergency2.mobile.trim()) newErrors['emergency2.mobile'] = 'This field is required.';
-    if (!formData.emergency2.relationship.trim()) newErrors['emergency2.relationship'] = 'This field is required.';
+    // Secondary emergency contact removed
     if (!formData.shirtSize) newErrors.shirtSize = 'This field is required.';
     
     // Medical Information Validation
@@ -388,7 +412,7 @@ const RegistrationPage = () => {
   };
 
   const renderExperiencePage = () => (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto px-6">
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">EXPERIENCE</h1>
@@ -584,11 +608,13 @@ const RegistrationPage = () => {
           </div>
         </form>
       </div>
+      
+      {/* no modal, inline preview used */}
     </div>
   );
 
   const renderComprehensiveForm = () => (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto px-6">
       {/* Header */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-between mb-4">
@@ -633,18 +659,31 @@ const RegistrationPage = () => {
             <label htmlFor="trainingDate" className="block text-lg font-semibold text-gray-800 mb-4">
               Choose which training date that you want to attend. <span className="text-red-500">(Required)</span>
             </label>
-            <select
-              id="trainingDate"
-              name="trainingDate"
-              value={formData.trainingDate}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-lg ${
-                errors.trainingDate ? 'border-red-500' : 'border-gray-300'
-              }`}
-            >
-              <option value="">CHOOSE A DATE</option>
-              <option value="NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322">NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322</option>
-            </select>
+            {formData.phase === '2' ? (
+              <input
+                type="text"
+                id="trainingDate"
+                name="trainingDate"
+                value={formData.trainingDate}
+                readOnly
+                className={`w-full px-4 py-3 border-2 rounded-lg bg-gray-50 text-lg ${
+                  errors.trainingDate ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+            ) : (
+              <select
+                id="trainingDate"
+                name="trainingDate"
+                value={formData.trainingDate}
+                onChange={handleInputChange}
+                className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 text-lg ${
+                  errors.trainingDate ? 'border-red-500' : 'border-gray-300'
+                }`}
+              >
+                <option value="">CHOOSE A DATE</option>
+                <option value="NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322">NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322</option>
+              </select>
+            )}
             {errors.trainingDate && (
               <p className="text-red-500 text-sm mt-2">{errors.trainingDate}</p>
             )}
@@ -811,7 +850,7 @@ const RegistrationPage = () => {
   );
 
   const renderDetailedForm = () => (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-7xl mx-auto px-6">
       {/* Header */}
       <div className="text-center mb-8">
         <img 
@@ -826,13 +865,7 @@ const RegistrationPage = () => {
         <p className="text-sm text-gray-600">Step 5 of 7 - 71%</p>
       </div>
 
-      {/* Maintenance Notice */}
-      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-        <div className="flex">
-          <AlertTriangle className="h-5 w-5 text-yellow-400 mr-2" />
-          <p className="text-yellow-800 font-bold">THIS FORM IS CURRENTLY ON MAINTENANCE.</p>
-        </div>
-      </div>
+      {/* Maintenance Notice removed */}
 
       {/* Detailed Form */}
       <div className="bg-white rounded-lg shadow-lg p-8">
@@ -866,16 +899,27 @@ const RegistrationPage = () => {
                 <label htmlFor="trainingDate" className="block text-sm font-semibold text-gray-700 mb-2">
                   Choose which training date that you want to attend. <span className="text-red-500">(Required)</span>
                 </label>
-                <select
-                  id="trainingDate"
-                  name="trainingDate"
-                  value={formData.trainingDate}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
-                >
-                  <option value="">CHOOSE A DATE</option>
-                  <option value="NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322">NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322</option>
-                </select>
+                {formData.phase === '2' ? (
+                  <input
+                    type="text"
+                    id="trainingDate"
+                    name="trainingDate"
+                    value={formData.trainingDate}
+                    readOnly
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg bg-gray-50 text-gray-800"
+                  />
+                ) : (
+                  <select
+                    id="trainingDate"
+                    name="trainingDate"
+                    value={formData.trainingDate}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                  >
+                    <option value="">CHOOSE A DATE</option>
+                    <option value="NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322">NOVEMBER 28th + 29th + 30th Phase III HUNTER VALLEY NSW 2322</option>
+                  </select>
+                )}
               </div>
             </div>
           </div>
@@ -959,6 +1003,7 @@ const RegistrationPage = () => {
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
                   />
                 </div>
+                {/* no bike image in billing */}
               </div>
             )}
 
@@ -977,13 +1022,8 @@ const RegistrationPage = () => {
                     }`}
                     onClick={() => handleInputChange({ target: { name: 'hireBike', value: 'HONDA CRF250 RALLY - $205/day' } })}
                   >
-                    <div className="bg-gray-100 rounded-lg p-4 mb-3 h-48 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-24 h-24 bg-gradient-to-br from-red-500 to-blue-500 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                          <Bike className="w-12 h-12 text-white" />
-                        </div>
-                        <p className="text-sm text-gray-600">Honda CRF250 Rally</p>
-                      </div>
+                    <div className="w-full bg-gray-100 rounded-lg p-4 mb-3 h-48 flex items-center justify-center">
+                      <img src={imgCrf250} alt="Honda CRF250 Rally" className="h-40 object-contain rounded pointer-events-none" />
                     </div>
                     <div className="text-center">
                       <p className="text-sm text-gray-600">(1 remaining)</p>
@@ -1001,13 +1041,8 @@ const RegistrationPage = () => {
                     }`}
                     onClick={() => handleInputChange({ target: { name: 'hireBike', value: 'BMW 310 GS - $215/day' } })}
                   >
-                    <div className="bg-gray-100 rounded-lg p-4 mb-3 h-48 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-24 h-24 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                          <Bike className="w-12 h-12 text-white" />
-                        </div>
-                        <p className="text-sm text-gray-600">BMW 310 GS</p>
-                      </div>
+                    <div className="w-full bg-gray-100 rounded-lg p-4 mb-3 h-48 flex items-center justify-center">
+                      <img src={imgBmw310} alt="BMW 310 GS" className="h-40 object-contain rounded pointer-events-none" />
                     </div>
                     <div className="text-center">
                       <p className="text-sm text-gray-600">(1 remaining)</p>
@@ -1025,13 +1060,8 @@ const RegistrationPage = () => {
                     }`}
                     onClick={() => handleInputChange({ target: { name: 'hireBike', value: 'HONDA CB500X - $230/day' } })}
                   >
-                    <div className="bg-gray-100 rounded-lg p-4 mb-3 h-48 flex items-center justify-center">
-                      <div className="text-center">
-                        <div className="w-24 h-24 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg mx-auto mb-2 flex items-center justify-center">
-                          <Bike className="w-12 h-12 text-white" />
-                        </div>
-                        <p className="text-sm text-gray-600">Honda CB500X</p>
-                      </div>
+                    <div className="w-full bg-gray-100 rounded-lg p-4 mb-3 h-48 flex items-center justify-center">
+                      <img src={imgCb500x} alt="Honda CB500X" className="h-40 object-contain rounded pointer-events-none" />
                     </div>
                     <div className="text-center">
                       <p className="text-sm text-gray-600">(1 remaining)</p>
@@ -1040,6 +1070,19 @@ const RegistrationPage = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Inline large preview below the tiles */}
+                {getSelectedBikeInfo() && (
+                  <div className="mt-8">
+                    <div className="bg-white border-2 border-gray-200 rounded-lg p-4 flex items-center justify-center">
+                      <img
+                        src={getSelectedBikeInfo().src}
+                        alt={getSelectedBikeInfo().name}
+                        className="w-full max-w-4xl h-auto object-contain"
+                      />
+                    </div>
+                  </div>
+                )}
 
                 {/* Add-on Options - Only show when a bike is selected */}
                 {formData.hireBike && (
@@ -1235,6 +1278,22 @@ const RegistrationPage = () => {
       <div className="bg-white rounded-lg shadow-lg p-8">
         <form onSubmit={(e) => {
           e.preventDefault();
+          // Validate tyre requirement selection
+          const newErrors = {};
+          if (!formData.requiresTyres) newErrors.requiresTyres = 'Please select an option.';
+          if (formData.requiresTyres === 'yes') {
+            if (!formData.frontTyre.width) newErrors['frontTyre.width'] = 'Required';
+            if (!formData.frontTyre.height) newErrors['frontTyre.height'] = 'Required';
+            if (!formData.frontTyre.rim) newErrors['frontTyre.rim'] = 'Required';
+            if (!formData.rearTyre.width) newErrors['rearTyre.width'] = 'Required';
+            if (!formData.rearTyre.height) newErrors['rearTyre.height'] = 'Required';
+            if (!formData.rearTyre.rim) newErrors['rearTyre.rim'] = 'Required';
+            if (!formData.preferredBrand.trim()) newErrors.preferredBrand = 'Required';
+            if (!formData.wheelType) newErrors.wheelType = 'Required';
+            if (!formData.tyreManagement) newErrors.tyreManagement = 'Required';
+          }
+          if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return; }
+          setErrors({});
           setCurrentStep('final');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}>
@@ -1251,6 +1310,9 @@ const RegistrationPage = () => {
             <label className="block text-lg font-semibold text-gray-800 mb-4">
               Do you require tyres? <span className="text-red-500">(Required)</span>
             </label>
+              {errors.requiresTyres && (
+                <p className="text-red-500 text-sm mb-2">{errors.requiresTyres}</p>
+              )}
             <div className="space-y-4">
               <label className="flex items-start">
                 <input
@@ -1298,7 +1360,7 @@ const RegistrationPage = () => {
                       name="frontTyreWidth"
                       value={formData.frontTyre.width}
                       onChange={(e) => handleInputChange({ target: { name: 'frontTyre', value: { ...formData.frontTyre, width: e.target.value } } })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors['frontTyre.width'] ? 'border-red-500' : 'border-gray-300'}`}
                     >
                       <option value="">Select Width</option>
                       <option value="80">80</option>
@@ -1317,7 +1379,7 @@ const RegistrationPage = () => {
                       name="frontTyreHeight"
                       value={formData.frontTyre.height}
                       onChange={(e) => handleInputChange({ target: { name: 'frontTyre', value: { ...formData.frontTyre, height: e.target.value } } })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors['frontTyre.height'] ? 'border-red-500' : 'border-gray-300'}`}
                     >
                       <option value="">Select Height</option>
                       <option value="60">60</option>
@@ -1335,7 +1397,7 @@ const RegistrationPage = () => {
                       name="frontTyreRim"
                       value={formData.frontTyre.rim}
                       onChange={(e) => handleInputChange({ target: { name: 'frontTyre', value: { ...formData.frontTyre, rim: e.target.value } } })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors['frontTyre.rim'] ? 'border-red-500' : 'border-gray-300'}`}
                     >
                       <option value="">Select Rim Size</option>
                       <option value="17">17</option>
@@ -1360,7 +1422,7 @@ const RegistrationPage = () => {
                       name="rearTyreWidth"
                       value={formData.rearTyre.width}
                       onChange={(e) => handleInputChange({ target: { name: 'rearTyre', value: { ...formData.rearTyre, width: e.target.value } } })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors['rearTyre.width'] ? 'border-red-500' : 'border-gray-300'}`}
                     >
                       <option value="">Select Width</option>
                       <option value="130">130</option>
@@ -1377,7 +1439,7 @@ const RegistrationPage = () => {
                       name="rearTyreHeight"
                       value={formData.rearTyre.height}
                       onChange={(e) => handleInputChange({ target: { name: 'rearTyre', value: { ...formData.rearTyre, height: e.target.value } } })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors['rearTyre.height'] ? 'border-red-500' : 'border-gray-300'}`}
                     >
                       <option value="">Select Height</option>
                       <option value="60">60</option>
@@ -1396,7 +1458,7 @@ const RegistrationPage = () => {
                       name="rearTyreRim"
                       value={formData.rearTyre.rim}
                       onChange={(e) => handleInputChange({ target: { name: 'rearTyre', value: { ...formData.rearTyre, rim: e.target.value } } })}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors['rearTyre.rim'] ? 'border-red-500' : 'border-gray-300'}`}
                     >
                       <option value="">Select Rim Size</option>
                       <option value="17">17</option>
@@ -1421,7 +1483,7 @@ const RegistrationPage = () => {
                       name="preferredBrand"
                       value={formData.preferredBrand}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+                      className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ${errors.preferredBrand ? 'border-red-500' : 'border-gray-300'}`}
                       placeholder="Enter preferred brand and model"
                     />
                   </div>
@@ -1454,7 +1516,7 @@ const RegistrationPage = () => {
                       value="Tubeless rims"
                       checked={formData.wheelType === 'Tubeless rims'}
                       onChange={handleInputChange}
-                      className="mr-3 w-5 h-5"
+                      className={`mr-3 w-5 h-5 ${errors.wheelType ? 'ring-2 ring-red-300' : ''}`}
                     />
                     <span className="text-lg">Tubeless rims</span>
                   </label>
@@ -1465,7 +1527,7 @@ const RegistrationPage = () => {
                       value="Tubed rims"
                       checked={formData.wheelType === 'Tubed rims'}
                       onChange={handleInputChange}
-                      className="mr-3 w-5 h-5"
+                      className={`mr-3 w-5 h-5 ${errors.wheelType ? 'ring-2 ring-red-300' : ''}`}
                     />
                     <span className="text-lg">Tubed rims</span>
                   </label>
@@ -1476,7 +1538,7 @@ const RegistrationPage = () => {
                       value="Tubed rims with rim locks"
                       checked={formData.wheelType === 'Tubed rims with rim locks'}
                       onChange={handleInputChange}
-                      className="mr-3 w-5 h-5"
+                      className={`mr-3 w-5 h-5 ${errors.wheelType ? 'ring-2 ring-red-300' : ''}`}
                     />
                     <span className="text-lg">Tubed rims with rim locks</span>
                   </label>
@@ -1515,7 +1577,7 @@ const RegistrationPage = () => {
                       value="WRARS"
                       checked={formData.tyreManagement === 'WRARS'}
                       onChange={handleInputChange}
-                      className="mr-3 w-5 h-5 mt-1"
+                      className={`mr-3 w-5 h-5 mt-1 ${errors.tyreManagement ? 'ring-2 ring-red-300' : ''}`}
                     />
                     <span className="text-lg">
                       $100 WRARS at the event destination to refit my arrival tyres for the journey home
@@ -1528,7 +1590,7 @@ const RegistrationPage = () => {
                       value="DISPOSE"
                       checked={formData.tyreManagement === 'DISPOSE'}
                       onChange={handleInputChange}
-                      className="mr-3 w-5 h-5 mt-1"
+                      className={`mr-3 w-5 h-5 mt-1 ${errors.tyreManagement ? 'ring-2 ring-red-300' : ''}`}
                     />
                     <span className="text-lg">
                       $24.00 DISPOSE after fitting at the event sign-on
@@ -1541,7 +1603,7 @@ const RegistrationPage = () => {
                       value="SHIP"
                       checked={formData.tyreManagement === 'SHIP'}
                       onChange={handleInputChange}
-                      className="mr-3 w-5 h-5 mt-1"
+                      className={`mr-3 w-5 h-5 mt-1 ${errors.tyreManagement ? 'ring-2 ring-red-300' : ''}`}
                     />
                     <span className="text-lg">
                       $75.00 SHIP from the event sign-on to my home
@@ -1586,7 +1648,7 @@ const RegistrationPage = () => {
   );
 
   const renderFinalPage = () => (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-7xl mx-auto px-6">
       {/* Header */}
       <div className="text-center mb-8">
         <img 
@@ -1609,6 +1671,24 @@ const RegistrationPage = () => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}>
           
+          {/* Event Information PDF (Step 8 viewer) */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Event Information PDF</h2>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <div className="aspect-[16/9] w-full">
+                <iframe
+                  src="/pdfs/MDP-Phase2-Information.pdf#toolbar=1&navpanes=1&scrollbar=1"
+                  title="MDP Event Information PDF"
+                  className="w-full h-full rounded"
+                />
+              </div>
+              <div className="mt-3 flex gap-3">
+                <a href="/pdfs/MDP-Phase2-Information.pdf" target="_blank" rel="noreferrer" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Open Fullscreen</a>
+                <a href="/pdfs/MDP-Phase2-Information.pdf" download className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800">Download PDF</a>
+              </div>
+            </div>
+          </div>
+
           {/* Terms and Conditions Section */}
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Terms and Conditions</h2>
@@ -1640,6 +1720,8 @@ const RegistrationPage = () => {
               />
             </div>
           </div>
+
+          
 
           {/* Payment Summary Section */}
           <div className="mb-12">
@@ -1708,21 +1790,35 @@ const RegistrationPage = () => {
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2">
                   <span className="text-gray-700">Training course</span>
-                  <span className="font-semibold">$0.00</span>
+                  <span className="font-semibold">{formatCurrency(trainingFee)}</span>
                 </div>
                 {formData.hasPartner === 'Yes' && (
                   <div className="flex justify-between items-center py-2">
                     <span className="text-gray-700">Non-riding Partner Joining Fee</span>
-                    <span className="font-semibold">$149.00</span>
+                    <span className="font-semibold">{formatCurrency(partnerFee)}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center py-2">
-                  <span className="text-gray-700">Bike Hire for 2 DAYS</span>
-                  <span className="font-semibold">$30.00</span>
+                  <span className="text-gray-700">Bike Hire for {HIRE_DAYS} DAYS</span>
+                  <span className="font-semibold">{formatCurrency(bikeHireTotal)}</span>
                 </div>
+                {Array.isArray(formData.addOns) && formData.addOns.length > 0 && (
+                  <>
+                    {formData.addOns.map((key) => (
+                      <div key={key} className="flex justify-between items-center py-2">
+                        <span className="text-gray-700">{ADD_ON_LABELS[key]} for {HIRE_DAYS} DAYS</span>
+                        <span className="font-semibold">{formatCurrency((ADD_ON_RATES[key] || 0) * HIRE_DAYS)}</span>
+                      </div>
+                    ))}
+                    <div className="flex justify-between items-center py-2 border-t border-gray-200">
+                      <span className="text-gray-700">Add-ons Subtotal</span>
+                      <span className="font-semibold">{formatCurrency(addOnsTotal)}</span>
+                    </div>
+                  </>
+                )}
                 <div className="flex justify-between items-center py-3 border-t-2 border-gray-300">
                   <span className="text-lg font-bold text-gray-900">Subtotal</span>
-                  <span className="text-lg font-bold text-gray-900">$0.00</span>
+                  <span className="text-lg font-bold text-gray-900">{formatCurrency(subtotal)}</span>
                 </div>
               </div>
             </div>
@@ -1734,17 +1830,19 @@ const RegistrationPage = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Subtotal</span>
-                    <span className="font-semibold">$0.00</span>
+                    <span className="font-semibold">{formatCurrency(subtotal)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Merchant Fee</span>
-                    <span className="font-semibold">$0.00</span>
+                    <span className="font-semibold">{formatCurrency(MERCHANT_FEE_FULL)}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-t border-gray-300">
                     <span className="text-lg font-bold text-gray-900">Total</span>
-                    <span className="text-lg font-bold text-gray-900">$0.00</span>
+                    <span className="text-lg font-bold text-gray-900">{formatCurrency(fullPaymentTotal)}</span>
                   </div>
                 </div>
+
+                {/* no bike image in billing */}
               </div>
             )}
 
@@ -1754,31 +1852,31 @@ const RegistrationPage = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Subtotal</span>
-                    <span className="font-semibold">$0.00</span>
+                    <span className="font-semibold">{formatCurrency(subtotal)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Bike Hire Balance</span>
-                    <span className="font-semibold">$0.00</span>
+                    <span className="font-semibold">{formatCurrency(Math.max(bikeHireTotal - NON_REFUNDABLE_DEPOSIT, 0))}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Add-ons Balance</span>
-                    <span className="font-semibold">$0.00</span>
+                    <span className="font-semibold">{formatCurrency(addOnsTotal)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Non-Refundable Deposit</span>
-                    <span className="font-semibold">$499.00</span>
+                    <span className="font-semibold">{formatCurrency(NON_REFUNDABLE_DEPOSIT)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Merchant Fee</span>
-                    <span className="font-semibold">$0.00</span>
+                    <span className="font-semibold">{formatCurrency(MERCHANT_FEE_DEPOSIT)}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-t border-gray-300">
                     <span className="text-lg font-bold text-gray-900">Amount to Pay</span>
-                    <span className="text-lg font-bold text-gray-900">$499.00</span>
+                    <span className="text-lg font-bold text-gray-900">{formatCurrency(depositPaymentTotal)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Total Remaining Balance</span>
-                    <span className="font-semibold">$0.00</span>
+                    <span className="font-semibold">{formatCurrency(Math.max(subtotal - NON_REFUNDABLE_DEPOSIT, 0))}</span>
                   </div>
                 </div>
               </div>
@@ -1814,7 +1912,7 @@ const RegistrationPage = () => {
   );
 
   const renderMaintenancePage = () => (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-7xl mx-auto px-6">
       {/* Header */}
       <div className="text-center mb-16">
         <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl mb-8 shadow-lg">
@@ -1880,7 +1978,6 @@ const RegistrationPage = () => {
               <div className="space-y-3 text-gray-700">
                 <p><span className="font-semibold">Primary Contact:</span> {formData.emergency1.firstName} {formData.emergency1.lastName}</p>
                 <p><span className="font-semibold">Relationship:</span> {formData.emergency1.relationship}</p>
-                <p><span className="font-semibold">Secondary Contact:</span> {formData.emergency2.firstName} {formData.emergency2.lastName}</p>
                 <p><span className="font-semibold">Shirt Size:</span> {formData.shirtSize}</p>
               </div>
             </div>
@@ -2551,130 +2648,7 @@ const RegistrationPage = () => {
           </div>
         </div>
 
-        {/* Emergency Contact 2 */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Next of Kin / Emergency Contact 2</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className={errors['emergency2.firstName'] ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>
-               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                 NOK2 First Name <span className="text-red-600 italic">(Required)</span>
-               </label>
-              <input
-                type="text"
-                name="emergency2.firstName"
-                value={formData.emergency2.firstName}
-                onChange={handleInputChange}
-                required
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300 ${
-                  errors['emergency2.firstName'] ? 'border-red-500 bg-red-50' : 'border-gray-300'
-                }`}
-              />
-              {errors['emergency2.firstName'] && (
-                <p className="text-red-500 text-sm mt-1 flex items-center animate-pulse">
-                  <AlertTriangle className="w-4 h-4 mr-1" />
-                  {errors['emergency2.firstName']}
-                </p>
-              )}
-            </div>
-            <div className={errors['emergency2.lastName'] ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                NOK2 Last Name <span className="text-red-600 italic">(Required)</span>
-              </label>
-              <input
-                type="text"
-                name="emergency2.lastName"
-                value={formData.emergency2.lastName}
-                onChange={handleInputChange}
-                required
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300 ${
-                  errors['emergency2.lastName'] ? 'border-red-500 bg-red-50' : 'border-gray-300'
-                }`}
-              />
-              {errors['emergency2.lastName'] && (
-                <p className="text-red-500 text-sm mt-1 flex items-center animate-pulse">
-                  <AlertTriangle className="w-4 h-4 mr-1" />
-                  {errors['emergency2.lastName']}
-                </p>
-              )}
-            </div>
-            <div className={errors['emergency2.email'] ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                NOK2 Email <span className="text-red-600 italic">(Required)</span>
-              </label>
-              <input
-                type="email"
-                name="emergency2.email"
-                value={formData.emergency2.email}
-                onChange={handleInputChange}
-                required
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300 ${
-                  errors['emergency2.email'] ? 'border-red-500 bg-red-50' : 'border-gray-300'
-                }`}
-              />
-              {errors['emergency2.email'] && (
-                <p className="text-red-500 text-sm mt-1 flex items-center animate-pulse">
-                  <AlertTriangle className="w-4 h-4 mr-1" />
-                  {errors['emergency2.email']}
-                </p>
-              )}
-            </div>
-            <div className={errors['emergency2.mobile'] ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                NOK2 Mobile Number <span className="text-red-600 italic">(Required)</span>
-              </label>
-              <input
-                type="tel"
-                name="emergency2.mobile"
-                value={formData.emergency2.mobile}
-                onChange={handleInputChange}
-                required
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300 ${
-                  errors['emergency2.mobile'] ? 'border-red-500 bg-red-50' : 'border-gray-300'
-                }`}
-              />
-              {errors['emergency2.mobile'] && (
-                <p className="text-red-500 text-sm mt-1 flex items-center animate-pulse">
-                  <AlertTriangle className="w-4 h-4 mr-1" />
-                  {errors['emergency2.mobile']}
-                </p>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                NOK2 Landline
-              </label>
-              <input
-                type="tel"
-                name="emergency2.landline"
-                value={formData.emergency2.landline}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300"
-              />
-            </div>
-            <div className={errors['emergency2.relationship'] ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                NOK2 Relationship <span className="text-red-600 italic">(Required)</span>
-              </label>
-              <input
-                type="text"
-                name="emergency2.relationship"
-                value={formData.emergency2.relationship}
-                onChange={handleInputChange}
-                required
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all duration-300 ${
-                  errors['emergency2.relationship'] ? 'border-red-500 bg-red-50' : 'border-gray-300'
-                }`}
-                placeholder="e.g., Spouse, Parent, Sibling"
-              />
-              {errors['emergency2.relationship'] && (
-                <p className="text-red-500 text-sm mt-1 flex items-center animate-pulse">
-                  <AlertTriangle className="w-4 h-4 mr-1" />
-                  {errors['emergency2.relationship']}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
+        {/* Emergency Contact 2 removed */}
 
         {/* Shirt Size */}
         <div className={errors.shirtSize ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>

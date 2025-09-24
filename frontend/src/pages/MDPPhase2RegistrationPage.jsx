@@ -141,8 +141,8 @@ const MDPPhase2RegistrationPage = () => {
   const nextStep = () => {
     if (validateStep(currentStep)) {
       if (currentStep === 2) {
-        // After Step 2 (confirmation), redirect to main registration page
-        navigate('/registration');
+        // After Step 2 (confirmation), redirect to main registration page and seed phase=2
+        navigate('/registration?phase=2');
       } else {
         setCurrentStep(currentStep + 1);
       }
@@ -154,7 +154,7 @@ const MDPPhase2RegistrationPage = () => {
   };
 
   const renderStep1 = () => (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-8">
         <div className="text-center mb-8">
           <img 
@@ -169,12 +169,7 @@ const MDPPhase2RegistrationPage = () => {
           <p className="text-sm text-gray-600">Step 1 of 8 - 12%</p>
         </div>
 
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-          <div className="flex">
-            <AlertTriangle className="h-5 w-5 text-yellow-400 mr-2" />
-            <p className="text-yellow-800 font-bold">THIS FORM IS CURRENTLY ON MAINTENANCE.</p>
-          </div>
-        </div>
+        {/* Maintenance notice removed */}
 
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">READ THE FOLLOWING BEFORE YOU START</h2>
@@ -183,6 +178,8 @@ const MDPPhase2RegistrationPage = () => {
             <h3 className="text-lg font-bold text-red-800 mb-2">THIS IS THE MASTERCLASS ADVENTURE RIDER DEVELOPMENT PROGRAM REGISTRATION PAGE - THIS IS NOT THE PAGE TO REQUEST COURSE INFORMATION.</h3>
             <p className="text-red-700">To request information about this event <a href="#" className="underline font-bold">CLICK HERE</a></p>
           </div>
+
+          {/* PDF viewer moved to RegistrationPage final step */}
 
           <div className="space-y-6">
             <div>
@@ -282,7 +279,7 @@ const MDPPhase2RegistrationPage = () => {
   );
 
   const renderStep2 = () => (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Course Information</h1>
@@ -344,10 +341,13 @@ const MDPPhase2RegistrationPage = () => {
     </div>
   );
 
+  // Step 3 removed. After Step 2 we redirect to the main registration form.
+
   return (
     <div className="min-h-screen bg-gray-100">
       {currentStep === 1 && renderStep1()}
       {currentStep === 2 && renderStep2()}
+      {/* Step 3 removed */}
       {/* Add more steps as needed */}
     </div>
   );

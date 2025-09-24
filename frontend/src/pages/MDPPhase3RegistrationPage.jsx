@@ -161,8 +161,8 @@ const MDPPhase3RegistrationPage = () => {
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
-      // Redirect to the main registration form page
-      navigate('/registration');
+      // Redirect to the main registration form page with phase=3
+      navigate('/registration?phase=3');
     }
   };
 
@@ -171,7 +171,7 @@ const MDPPhase3RegistrationPage = () => {
   };
 
   const renderStep1 = () => (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-8">
         <div className="text-center mb-8">
           <img 
@@ -186,12 +186,7 @@ const MDPPhase3RegistrationPage = () => {
           <p className="text-sm text-gray-600">Step 1 of 8 - 12%</p>
         </div>
 
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-          <div className="flex">
-            <AlertTriangle className="h-5 w-5 text-yellow-400 mr-2" />
-            <p className="text-yellow-800 font-bold">THIS FORM IS CURRENTLY ON MAINTENANCE.</p>
-          </div>
-        </div>
+        {/* Maintenance notice removed for consistency */}
 
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">READ THE FOLLOWING BEFORE YOU START</h2>
@@ -299,7 +294,7 @@ const MDPPhase3RegistrationPage = () => {
   );
 
   const renderStep2 = () => (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto p-6">
       <div className="bg-white rounded-lg shadow-lg p-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Course Information</h1>

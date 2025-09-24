@@ -117,10 +117,13 @@ const RegistrationPage = () => {
   const TRAINING_FEE_PHASE2 = 990;
   const TRAINING_FEE_PHASE3 = 1190;
   const PARTNER_FEE = 149;
-  const NON_REFUNDABLE_DEPOSIT = 499;
+  const NON_REFUNDABLE_DEPOSIT = 499; // Default for Phase 2
+  const NON_REFUNDABLE_DEPOSIT_PHASE3 = 729; // Phase 3 specific deposit
   const HIRE_DAYS = 2; // shown in UI
-  const MERCHANT_FEE_FULL = 29.75;
-  const MERCHANT_FEE_DEPOSIT = 9.33;
+  const MERCHANT_FEE_FULL = 16.83; // Default for Phase 2
+  const MERCHANT_FEE_FULL_PHASE3 = 28.05; // Phase 3 specific full payment fee
+  const MERCHANT_FEE_DEPOSIT = 8.48; // Default for Phase 2
+  const MERCHANT_FEE_DEPOSIT_PHASE3 = 12.39; // Phase 3 specific deposit fee
 
   const formatCurrency = (amount) => `$${amount.toFixed(2)}`;
 
@@ -154,8 +157,15 @@ const RegistrationPage = () => {
   const partnerFee = formData.hasPartner === 'Yes' ? PARTNER_FEE : 0;
   const trainingFee = formData.phase === '2' ? TRAINING_FEE_PHASE2 : TRAINING_FEE_PHASE3;
   const subtotal = trainingFee + partnerFee + bikeHireTotal + addOnsTotal;
-  const fullPaymentTotal = subtotal + MERCHANT_FEE_FULL;
-  const depositPaymentTotal = NON_REFUNDABLE_DEPOSIT + MERCHANT_FEE_DEPOSIT;
+  
+  // Use Phase 3 specific fees when phase is 3
+  const isPhase3 = formData.phase === '3';
+  const currentDeposit = isPhase3 ? NON_REFUNDABLE_DEPOSIT_PHASE3 : NON_REFUNDABLE_DEPOSIT;
+  const currentMerchantFeeFull = isPhase3 ? MERCHANT_FEE_FULL_PHASE3 : MERCHANT_FEE_FULL;
+  const currentMerchantFeeDeposit = isPhase3 ? MERCHANT_FEE_DEPOSIT_PHASE3 : MERCHANT_FEE_DEPOSIT;
+  
+  const fullPaymentTotal = subtotal + currentMerchantFeeFull;
+  const depositPaymentTotal = currentDeposit + currentMerchantFeeDeposit;
 
   // Bike image mapping and helpers for inline preview
   const BIKE_IMAGES = {
@@ -1834,7 +1844,7 @@ const RegistrationPage = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Merchant Fee</span>
-                    <span className="font-semibold">{formatCurrency(MERCHANT_FEE_FULL)}</span>
+                    <span className="font-semibold">{formatCurrency(currentMerchantFeeFull)}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-t border-gray-300">
                     <span className="text-lg font-bold text-gray-900">Total</span>
@@ -1856,7 +1866,7 @@ const RegistrationPage = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Bike Hire Balance</span>
-                    <span className="font-semibold">{formatCurrency(Math.max(bikeHireTotal - NON_REFUNDABLE_DEPOSIT, 0))}</span>
+                    <span className="font-semibold">{formatCurrency(Math.max(bikeHireTotal - currentDeposit, 0))}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Add-ons Balance</span>
@@ -1864,11 +1874,11 @@ const RegistrationPage = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Non-Refundable Deposit</span>
-                    <span className="font-semibold">{formatCurrency(NON_REFUNDABLE_DEPOSIT)}</span>
+                    <span className="font-semibold">{formatCurrency(currentDeposit)}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Merchant Fee</span>
-                    <span className="font-semibold">{formatCurrency(MERCHANT_FEE_DEPOSIT)}</span>
+                    <span className="font-semibold">{formatCurrency(currentMerchantFeeDeposit)}</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-t border-gray-300">
                     <span className="text-lg font-bold text-gray-900">Amount to Pay</span>
@@ -1876,7 +1886,7 @@ const RegistrationPage = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-700">Total Remaining Balance</span>
-                    <span className="font-semibold">{formatCurrency(Math.max(subtotal - NON_REFUNDABLE_DEPOSIT, 0))}</span>
+                    <span className="font-semibold">{formatCurrency(Math.max(subtotal - currentDeposit, 0))}</span>
                   </div>
                 </div>
               </div>

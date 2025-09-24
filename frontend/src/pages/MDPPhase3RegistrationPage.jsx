@@ -214,7 +214,7 @@ const MDPPhase3RegistrationPage = () => {
                 <li>Fuel capacity and range of your motorcycle</li>
                 <li>A Visa or MasterCard to complete your payment</li>
               </ul>
-              <p className="text-gray-700 mt-2 font-bold">The minimum deposit is 499 plus bank merchant fees</p>
+              <p className="text-gray-700 mt-2 font-bold">The minimum deposit is $729.00 plus bank merchant fees ($12.39)</p>
             </div>
 
             <div>

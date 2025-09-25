@@ -155,8 +155,8 @@ const HireBookingForm = () => {
     setFormData(prev => ({ ...prev, country: value, state: '' }));
   };
 
-  // Rental Agreement PDF (update this URL if you host a different PDF)
-  const rentalAgreementPdfUrl = 'https://www.mototrekkin.com.au/wp-content/uploads/2024/01/Moto-Trekkin-Rental-Agreement.pdf';
+  // Rental Agreement PDF served from public/pdfs
+  const rentalAgreementPdfUrl = '/pdfs/MDP 2025 v.1.01.022.pdf';
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -911,71 +911,6 @@ const HireBookingForm = () => {
           </div>
         </div>
 
-        {/* NOK 2 */}
-        <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Next of Kin / Emergency Contact 2</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">First Name <span className="text-red-500">(Required)</span></label>
-              <input
-                type="text"
-                value={formData.emergency2.firstName}
-                onChange={(e) => handleNestedInputChange('emergency2','firstName', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.emergency2FirstName && <p className="mt-1 text-sm text-red-600">{errors.emergency2FirstName}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Last Name <span className="text-red-500">(Required)</span></label>
-              <input
-                type="text"
-                value={formData.emergency2.lastName}
-                onChange={(e) => handleNestedInputChange('emergency2','lastName', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.emergency2LastName && <p className="mt-1 text-sm text-red-600">{errors.emergency2LastName}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email <span className="text-red-500">(Required)</span></label>
-              <input
-                type="email"
-                value={formData.emergency2.email}
-                onChange={(e) => handleNestedInputChange('emergency2','email', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.emergency2Email && <p className="mt-1 text-sm text-red-600">{errors.emergency2Email}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Mobile Number <span className="text-red-500">(Required)</span></label>
-              <input
-                type="tel"
-                value={formData.emergency2.mobile}
-                onChange={(e) => handleNestedInputChange('emergency2','mobile', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.emergency2Mobile && <p className="mt-1 text-sm text-red-600">{errors.emergency2Mobile}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Landline</label>
-              <input
-                type="tel"
-                value={formData.emergency2.landline}
-                onChange={(e) => handleNestedInputChange('emergency2','landline', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Relationship <span className="text-red-500">(Required)</span></label>
-              <input
-                type="text"
-                value={formData.emergency2.relationship}
-                onChange={(e) => handleNestedInputChange('emergency2','relationship', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {errors.emergency2Relationship && <p className="mt-1 text-sm text-red-600">{errors.emergency2Relationship}</p>}
-            </div>
-          </div>
-        </div>
 
         {/* Driver's Licence Details */}
         <div className="mt-10">
@@ -1072,12 +1007,7 @@ const HireBookingForm = () => {
               if (!String(formData.emergency1.email || '').trim() || !emailRegex.test(formData.emergency1.email)) newErrors.emergency1Email = 'Enter a valid email address.';
               if (!String(formData.emergency1.mobile || '').trim()) newErrors.emergency1Mobile = 'This field is required.';
               if (!String(formData.emergency1.relationship || '').trim()) newErrors.emergency1Relationship = 'This field is required.';
-              // Emergency 2 required (except landline)
-              if (!String(formData.emergency2.firstName || '').trim()) newErrors.emergency2FirstName = 'This field is required.';
-              if (!String(formData.emergency2.lastName || '').trim()) newErrors.emergency2LastName = 'This field is required.';
-              if (!String(formData.emergency2.email || '').trim() || !emailRegex.test(formData.emergency2.email)) newErrors.emergency2Email = 'Enter a valid email address.';
-              if (!String(formData.emergency2.mobile || '').trim()) newErrors.emergency2Mobile = 'This field is required.';
-              if (!String(formData.emergency2.relationship || '').trim()) newErrors.emergency2Relationship = 'This field is required.';
+              // Remove NOK2 requirements
               // Licence validation
               if (!String(formData.licenseValid || '').trim()) newErrors.licenseValid = 'Please choose Yes or No.';
               if (!String(formData.licenseNumber || '').trim()) newErrors.licenseNumber = 'This field is required.';
@@ -1109,6 +1039,15 @@ const HireBookingForm = () => {
 
         <div className="space-y-6">
           <p className="text-gray-700">Please read our Rental Agreement and confirm your acceptance to proceed. The agreement outlines responsibilities, insurance, damage excess, cancellation terms and safe riding requirements.</p>
+
+          {/* PDF Preview */}
+          <div className="border rounded-md overflow-hidden">
+            <iframe
+              title="Rental Agreement Preview"
+              src={rentalAgreementPdfUrl}
+              className="w-full h-[70vh]"
+            />
+          </div>
 
           <div className="flex items-center">
             <input

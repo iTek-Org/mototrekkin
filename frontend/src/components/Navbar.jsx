@@ -18,7 +18,7 @@ export default function Navbar() {
       {/* Desktop Nav */}
       <div className="hidden lg:flex space-x-8 text-sm font-medium">
         <a href="#" className="hover:text-yellow-400 transition">Adventures</a>
-        <a href="#" className="hover:text-yellow-400 transition">Hire</a>
+        <NavLink to="/hire" className="hover:text-yellow-400 transition">Hire</NavLink>
         <a href="#" className="hover:text-yellow-400 transition">Videos</a>
         <NavLink to="/training" className="hover:text-yellow-400 transition">Training</NavLink>
         <a href="#" className="hover:text-yellow-400 transition">Tyres</a>
@@ -51,7 +51,7 @@ export default function Navbar() {
       {isOpen && (
         <div className="absolute top-14 left-0 w-full bg-black text-yellow-500 flex flex-col items-center space-y-4 py-6 lg:hidden">
           <a href="#" className="hover:text-yellow-400 transition">Adventures</a>
-          <a href="#" className="hover:text-yellow-400 transition">Hire</a>
+          <NavLink to="/hire" className="hover:text-yellow-400 transition">Hire</NavLink>
           <a href="#" className="hover:text-yellow-400 transition">Videos</a>
           <NavLink to="/training" className="hover:text-yellow-400 transition">Training</NavLink>
           <a href="#" className="hover:text-yellow-400 transition">Tyres</a>

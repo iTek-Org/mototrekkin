@@ -9,6 +9,7 @@ import RegistrationPage from './pages/RegistrationPage';
 import MDPPhase2RegistrationPage from './pages/MDPPhase2RegistrationPage';
 import MDPPhase3RegistrationPage from './pages/MDPPhase3RegistrationPage';
 import MotorcycleHirePage from './pages/MotorcycleHirePage';
+import AdventuresPage from './pages/AdventuresPage';
 import Footer from './components/Footer';
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/adventures" element={<AdventuresPage />} />
           <Route path="/hearing-protection" element={<HearingProtectionPage />} />
           <Route path="/training" element={<TrainingPage />} />
           <Route path="/off-road-training-detail" element={<OffRoadTrainingDetailPage />} />

@@ -6,6 +6,11 @@ import logo from "../assets/MT.webp"
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleAdventuresClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsOpen(false); // Close mobile menu if open
+  };
+
   return (
     <nav className="bg-black text-yellow-500 px-6 py-3 flex items-center justify-between sticky top-0 z-1000">
       {/* Left: Logo */}
@@ -17,7 +22,7 @@ export default function Navbar() {
 
       {/* Desktop Nav */}
       <div className="hidden lg:flex space-x-8 text-sm font-medium">
-        <a href="#" className="hover:text-yellow-400 transition">Adventures</a>
+        <NavLink to="/adventures" className="hover:text-yellow-400 transition" onClick={handleAdventuresClick}>Adventures</NavLink>
         <NavLink to="/hire" className="hover:text-yellow-400 transition">Hire</NavLink>
         <a href="#" className="hover:text-yellow-400 transition">Videos</a>
         <NavLink to="/training" className="hover:text-yellow-400 transition">Training</NavLink>
@@ -50,7 +55,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="absolute top-14 left-0 w-full bg-black text-yellow-500 flex flex-col items-center space-y-4 py-6 lg:hidden">
-          <a href="#" className="hover:text-yellow-400 transition">Adventures</a>
+          <NavLink to="/adventures" className="hover:text-yellow-400 transition" onClick={handleAdventuresClick}>Adventures</NavLink>
           <NavLink to="/hire" className="hover:text-yellow-400 transition">Hire</NavLink>
           <a href="#" className="hover:text-yellow-400 transition">Videos</a>
           <NavLink to="/training" className="hover:text-yellow-400 transition">Training</NavLink>

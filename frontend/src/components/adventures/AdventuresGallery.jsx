@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import adventure2025 from '../../assets/adventures/2025.webp';
 import adventure2026 from '../../assets/adventures/2026.webp';
 
@@ -87,9 +88,12 @@ const AdventuresGallery = () => {
                   <p className="font-semibold group-hover:text-yellow-200 transition-colors duration-300">• Autumn Scenic Tour - October 10-12</p>
                 </div>
                 <div className="mt-6">
-                  <button className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg text-lg shadow-xl transition-all duration-300 transform hover:scale-105 hover:shadow-yellow-500/25 hover:shadow-2xl">
+                  <Link 
+                    to="/adventures/2025-event-calendar"
+                    className="inline-block bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-8 rounded-lg text-lg shadow-xl transition-all duration-300 transform hover:scale-105 hover:shadow-yellow-500/25 hover:shadow-2xl"
+                  >
                     View 2025 Events
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

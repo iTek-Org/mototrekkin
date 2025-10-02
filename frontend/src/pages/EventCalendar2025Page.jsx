@@ -69,20 +69,6 @@ const EventCalendar2025Page = () => {
             <p className="text-lg md:text-xl max-w-3xl mx-auto mb-12 leading-relaxed">
               Anticipation is running high as we prepare to roll into the next year with even more adrenaline-pumping action and unforgettable two-wheeled adventures.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                to="/adventures"
-                className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-8 rounded-lg text-lg shadow-xl transition-all duration-300 transform hover:scale-105"
-              >
-                BACK TO ADVENTURES
-              </Link>
-              <Link 
-                to="/"
-                className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105"
-              >
-                BACK TO HOMEPAGE
-              </Link>
-            </div>
           </div>
         </div>
       </section>
@@ -236,25 +222,6 @@ const EventCalendar2025Page = () => {
         </div>
       </section>
 
-      {/* Bottom Navigation */}
-      <section className="py-12 bg-gray-100">
-        <div className="container mx-auto px-6 text-center">
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              to="/adventures"
-              className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-4 px-8 rounded-lg text-lg shadow-xl transition-all duration-300 transform hover:scale-105"
-            >
-              BACK TO ADVENTURES
-            </Link>
-            <Link 
-              to="/"
-              className="bg-transparent border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105"
-            >
-              BACK TO HOMEPAGE
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

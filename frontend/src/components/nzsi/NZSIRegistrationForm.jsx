@@ -7,6 +7,8 @@ import bmwF750GS from '../../assets/adventures/2025/NZSI/Bikes/BMW-F750GS_165031
 import bmwF800GS from '../../assets/adventures/2025/NZSI/Bikes/BMW-F800GS.webp';
 import bmwF850GS from '../../assets/adventures/2025/NZSI/Bikes/BMW-F850GS_165032-scaled.webp';
 import bmwR1200GS from '../../assets/adventures/2025/NZSI/Bikes/BMW-R1200GS_GSA-_165034-scaled.webp';
+import bmwR1200GSLow from '../../assets/adventures/2025/NZSI/Bikes/BMW R1200GS LOW.webp';
+import bmwF850GSLowHigh from '../../assets/adventures/2025/NZSI/Bikes/BMW F850GS LOW  HIGH SEAT.webp';
 import hondaCB500X from '../../assets/adventures/2025/NZSI/Bikes/Honda-CB500X_165042-scaled.webp';
 import hondaNX500 from '../../assets/adventures/2025/NZSI/Bikes/HONDA-NX500-1.webp';
 import yamahaTenere700 from '../../assets/adventures/2025/NZSI/Bikes/Yamaha-XTZ690-T7-Tenere-700_165048-scaled.webp';
@@ -82,7 +84,7 @@ const NZSIRegistrationForm = () => {
         paymentOption: '',
         partnerIncluded: false,
         // Motorcycle Selection
-        hireOption: '',
+        hireOption: 'Hire a Motorcycle',
         
         // Driver's Licence Details
         licenceValid: '',
@@ -213,7 +215,7 @@ const NZSIRegistrationForm = () => {
       price: 279, 
       available: true, 
       remaining: 2, 
-      image: bmwR1200GS,
+      image: bmwR1200GSLow,
       specs: {
         mileage: '16 kmpl',
         displacement: '1170 cc',
@@ -259,7 +261,7 @@ const NZSIRegistrationForm = () => {
       price: 259, 
       available: true, 
       remaining: 1, 
-      image: bmwF850GS,
+      image: bmwF850GSLowHigh,
       specs: {
         mileage: '24 kmpl',
         displacement: '853 cc',
@@ -592,8 +594,12 @@ const NZSIRegistrationForm = () => {
         break;
         
           case 6: // Motorcycle Selection
+            console.log('Validating step 6 - Motorcycle Selection');
+            console.log('hireOption:', formData.hireOption);
+            console.log('selectedMotorcycle:', formData.selectedMotorcycle);
             if (!formData.hireOption) newErrors.hireOption = 'Hire option is required to select';
             if (!formData.selectedMotorcycle) newErrors.selectedMotorcycle = 'Motorcycle selection is required';
+            console.log('Step 6 errors:', newErrors);
             break;
             
           case 7: // Driver's Licence Details
@@ -687,7 +693,13 @@ const NZSIRegistrationForm = () => {
 
   const nextStep = () => {
     if (currentStep < 12) {
-      if (validateStep(currentStep)) {
+      console.log('Current step:', currentStep);
+      console.log('Form data for current step:', formData);
+      const isValid = validateStep(currentStep);
+      console.log('Validation result:', isValid);
+      console.log('Current errors:', errors);
+      
+      if (isValid) {
         setCurrentStep(currentStep + 1);
       } else {
         // Scroll to the first error field
@@ -1769,16 +1781,21 @@ const NZSIRegistrationForm = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Choose which motorbike you wish to hire. (Required)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-4">Choose which motorbike you wish to hire. (Required)</label>
               
-              <div className="space-y-2">
+              {/* Grid layout for motorcycles - 6 per row */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {motorcycles.map((bike, index) => (
                   <label
                     key={index}
-                    className={`flex items-center p-2 cursor-pointer ${
+                    className={`relative cursor-pointer group ${
                       !bike.available
                         ? 'cursor-not-allowed opacity-50'
-                        : 'hover:bg-gray-50'
+                        : 'hover:shadow-lg transition-shadow duration-200'
+                    } ${
+                      formData.selectedMotorcycle === bike.name
+                        ? 'ring-2 ring-blue-500 shadow-lg'
+                        : ''
                     }`}
                   >
                     <input
@@ -1788,19 +1805,53 @@ const NZSIRegistrationForm = () => {
                       checked={formData.selectedMotorcycle === bike.name}
                       onChange={handleInputChange}
                       disabled={!bike.available}
-                      className="mr-3"
+                      className="sr-only"
                     />
-                    <span className="text-gray-900">
-                      {!bike.available ? (
-                        'SOLD OUT'
-                      ) : (
-                        `${bike.name} - $${bike.price}/day(${bike.remaining} remaining)`
-                      )}
-                    </span>
+                    
+                    <div className={`bg-white rounded-lg border-2 p-4 text-center transition-all duration-200 ${
+                      formData.selectedMotorcycle === bike.name
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                    } ${!bike.available ? 'border-gray-100' : ''}`}>
+                      
+                      {/* Bike Image */}
+                      <div className="mb-3">
+                        {bike.image ? (
+                          <img
+                            src={bike.image}
+                            alt={bike.name}
+                            className="w-full h-32 object-cover rounded-md mx-auto"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-32 bg-gray-200 rounded-md flex items-center justify-center">
+                            <span className="text-gray-400 text-sm">No Image</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Bike Details */}
+                      <div className="space-y-1">
+                        {!bike.available ? (
+                          <div className="text-center">
+                            <div className="text-red-500 font-semibold text-sm mb-1">SOLD OUT</div>
+                            <div className="text-gray-500 text-xs">{bike.name}</div>
+                          </div>
+                        ) : (
+                          <div className="text-center">
+                            <div className="text-gray-500 text-xs mb-1">({bike.remaining} remaining)</div>
+                            <div className="font-semibold text-gray-900 text-sm mb-1 line-clamp-2">{bike.name}</div>
+                            <div className="text-blue-600 font-bold text-sm">${bike.price}/day</div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </label>
                 ))}
               </div>
-              {errors.selectedMotorcycle && <p className="text-red-500 text-sm mt-1">{errors.selectedMotorcycle}</p>}
+              {errors.selectedMotorcycle && <p className="text-red-500 text-sm mt-2">{errors.selectedMotorcycle}</p>}
             </div>
 
             <div className="bg-gray-50 border-l-4 border-gray-400 p-4">

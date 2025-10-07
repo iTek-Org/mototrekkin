@@ -325,7 +325,9 @@ const RegistrationPage = () => {
     // If validation passes, go to experience page
     setCurrentStep('experience');
     // Scroll to top after successful submission
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   };
 
   const renderField = (name, label, type = 'text', options = {}, required = false) => {
@@ -395,7 +397,7 @@ const RegistrationPage = () => {
         <label className="block text-sm font-semibold text-gray-800 mb-4">
           {label} {required && <span className="text-red-500 ml-1">*</span>}
         </label>
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6">
           {options.map(option => (
             <label key={option.value} className="flex items-center cursor-pointer group">
               <input
@@ -422,10 +424,10 @@ const RegistrationPage = () => {
   };
 
   const renderExperiencePage = () => (
-    <div className="max-w-7xl mx-auto px-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6">
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">EXPERIENCE</h1>
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">EXPERIENCE</h1>
         <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
           <div className="bg-blue-600 h-2 rounded-full" style={{width: '42%'}}></div>
         </div>
@@ -433,19 +435,21 @@ const RegistrationPage = () => {
       </div>
 
       {/* Experience Form */}
-      <div className="bg-white rounded-lg shadow-lg p-8">
+      <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8">
         <form onSubmit={(e) => {
           e.preventDefault();
           setCurrentStep('comprehensive');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
         }}>
           <div className="space-y-8">
             {/* Question 1: Professional Training */}
             <div>
-              <label className="block text-lg font-semibold text-gray-800 mb-4">
+              <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
                 Have you ever attended a professional off road motorcycle training course? <span className="text-red-500">(Required)</span>
               </label>
-              <div className="flex space-x-6">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -473,10 +477,10 @@ const RegistrationPage = () => {
               {/* Follow-up Question: Recent Training */}
               {formData.attendedTraining === 'Yes' && (
                 <div className="mt-6">
-                  <label className="block text-lg font-semibold text-gray-800 mb-4">
+                  <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
                     If yes, was your training course completed in the last 6 months? <span className="text-red-500">(Required)</span>
                   </label>
-                  <div className="flex space-x-6">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                     <label className="flex items-center">
                       <input
                         type="radio"
@@ -504,7 +508,7 @@ const RegistrationPage = () => {
                   {/* Training Details Text Area */}
                   {formData.recentTrainingSixMonths === 'Yes' && (
                     <div className="mt-6">
-                      <label className="block text-lg font-semibold text-gray-800 mb-4">
+                      <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
                         Please detail course content such as advanced sand course etc. <span className="text-red-500">(Required)</span>
                       </label>
                       <textarea
@@ -523,7 +527,7 @@ const RegistrationPage = () => {
 
             {/* Question 2: Off Road Experience */}
             <div>
-              <label className="block text-lg font-semibold text-gray-800 mb-4">
+              <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
                 Explain how much off road experience you have. It's okay if you don't have a lot of experience but we need to know. <span className="text-red-500">(Required)</span>
               </label>
               <textarea
@@ -538,10 +542,10 @@ const RegistrationPage = () => {
 
             {/* Question 3: Riding Experience Level */}
             <div>
-              <label className="block text-lg font-semibold text-gray-800 mb-4">
+              <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
                 Overall, how would you personally rate your off road riding experience. <span className="text-red-500">(Required)</span>
               </label>
-              <div className="flex space-x-6">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                 <label className="flex items-center">
                   <input
                     type="radio"
@@ -580,7 +584,7 @@ const RegistrationPage = () => {
 
             {/* Question 4: Confidence Concerns */}
             <div>
-              <label className="block text-lg font-semibold text-gray-800 mb-4">
+              <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
                 Is there anything you feel you are not confident with that could cause an issue for you on this adventure ride? <span className="text-red-500">(Required)</span>
               </label>
               <textarea
@@ -595,14 +599,16 @@ const RegistrationPage = () => {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="flex justify-between mt-12 pt-8 border-t-2 border-gray-200">
+          <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 mt-6 sm:mt-12 pt-4 sm:pt-8 border-t-2 border-gray-200">
             <button
               type="button"
               onClick={() => {
                 setCurrentStep('form');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
               }}
-              className="inline-flex items-center px-8 py-4 border-2 border-gray-300 rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 border-2 border-gray-300 rounded-lg sm:rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
             >
               <ArrowLeft className="w-5 h-5 mr-3" />
               PREVIOUS
@@ -610,9 +616,9 @@ const RegistrationPage = () => {
             
             <button
               type="submit"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl transition-all duration-300 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg sm:rounded-xl transition-all duration-300 font-bold shadow-md sm:shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
             >
-              <span className="text-lg">NEXT</span>
+              <span className="text-base sm:text-lg">NEXT</span>
               <Star className="w-5 h-5 ml-3" />
             </button>
           </div>
@@ -661,12 +667,14 @@ const RegistrationPage = () => {
           }
           
           setCurrentStep('detailed');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
         }}>
           
           {/* Training Date Section */}
           <div className="mb-8">
-            <label htmlFor="trainingDate" className="block text-lg font-semibold text-gray-800 mb-4">
+            <label htmlFor="trainingDate" className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
               Choose which training date that you want to attend. <span className="text-red-500">(Required)</span>
             </label>
             {formData.phase === '2' ? (
@@ -714,11 +722,11 @@ const RegistrationPage = () => {
 
           {/* Riding with a Group Section */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">RIDING WITH A GROUP</h2>
-            <label className="block text-lg font-semibold text-gray-800 mb-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">RIDING WITH A GROUP</h2>
+            <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
               Are you planning to ride this event with a mate or several friends? i.e a group <span className="text-red-500">(Required)</span>
             </label>
-            <div className="flex space-x-6">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
               <label htmlFor="groupRiding-yes" className="flex items-center">
                 <input
                   type="radio"
@@ -774,11 +782,11 @@ const RegistrationPage = () => {
 
           {/* Non-riding Partner Section */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">NON-RIDING PARTNER</h2>
-            <label className="block text-lg font-semibold text-gray-800 mb-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">NON-RIDING PARTNER</h2>
+            <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
               Do you wish to register a non-riding partner? <span className="text-red-500">(Required)</span>
             </label>
-            <div className="flex space-x-6">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
               <label htmlFor="hasPartner-yes" className="flex items-center">
                 <input
                   type="radio"
@@ -838,9 +846,11 @@ const RegistrationPage = () => {
               type="button"
               onClick={() => {
                 setCurrentStep('experience');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
               }}
-              className="inline-flex items-center px-8 py-4 border-2 border-gray-300 rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 border-2 border-gray-300 rounded-lg sm:rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
             >
               <ArrowLeft className="w-5 h-5 mr-3" />
               PREVIOUS
@@ -848,9 +858,9 @@ const RegistrationPage = () => {
             
             <button
               type="submit"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl transition-all duration-300 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg sm:rounded-xl transition-all duration-300 font-bold shadow-md sm:shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
             >
-              <span className="text-lg">NEXT</span>
+              <span className="text-base sm:text-lg">NEXT</span>
               <Star className="w-5 h-5 ml-3" />
             </button>
           </div>
@@ -882,14 +892,16 @@ const RegistrationPage = () => {
         <form onSubmit={(e) => {
           e.preventDefault();
           setCurrentStep('tyre');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
         }}>
           
 
           {/* Training Date Section */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Training Date</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Training Date</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label htmlFor="trainingState" className="block text-sm font-semibold text-gray-700 mb-2">
                   Choose which state you want to have your training. <span className="text-red-500">(Required)</span>
@@ -936,12 +948,12 @@ const RegistrationPage = () => {
 
           {/* Bike Details Section */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Bike Details</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Bike Details</h2>
             <div className="mb-6">
               <label className="block text-sm font-semibold text-gray-700 mb-4">
                 Would you like to:
               </label>
-              <div className="flex space-x-6">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                 <label htmlFor="bikeChoice-own" className="flex items-center">
                   <input
                     type="radio"
@@ -970,7 +982,7 @@ const RegistrationPage = () => {
             </div>
 
             {formData.bikeChoice === 'own' && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 <div>
                   <label htmlFor="bikeMake" className="block text-sm font-semibold text-gray-700 mb-2">
                     Bike Make <span className="text-red-500">(Required)</span>
@@ -1022,7 +1034,7 @@ const RegistrationPage = () => {
                 <label className="block text-sm font-semibold text-gray-700 mb-4">
                   Choose which motorbike you wish to hire. <span className="text-red-500">(Required)</span>
                 </label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {/* Honda CRF250 Rally */}
                   <div 
                     className={`border-2 rounded-lg p-4 cursor-pointer transition-all duration-300 ${
@@ -1168,13 +1180,13 @@ const RegistrationPage = () => {
 
           {/* Driver's Licence Section */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Driver's Licence Details</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Driver's Licence Details</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Is your licence currently valid? <span className="text-red-500">(Required)</span>
                 </label>
-                <div className="flex space-x-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <label htmlFor="licenseValid-yes" className="flex items-center">
                     <input
                       type="radio"
@@ -1247,9 +1259,11 @@ const RegistrationPage = () => {
               type="button"
               onClick={() => {
                 setCurrentStep('comprehensive');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
               }}
-              className="inline-flex items-center px-8 py-4 border-2 border-gray-300 rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 border-2 border-gray-300 rounded-lg sm:rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
             >
               <ArrowLeft className="w-5 h-5 mr-3" />
               PREVIOUS
@@ -1257,9 +1271,9 @@ const RegistrationPage = () => {
             
             <button
               type="submit"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl transition-all duration-300 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg sm:rounded-xl transition-all duration-300 font-bold shadow-md sm:shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
             >
-              <span className="text-lg">NEXT</span>
+              <span className="text-base sm:text-lg">NEXT</span>
               <Star className="w-5 h-5 ml-3" />
             </button>
           </div>
@@ -1305,7 +1319,9 @@ const RegistrationPage = () => {
           if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return; }
           setErrors({});
           setCurrentStep('final');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
         }}>
           
           {/* Tyre Information */}
@@ -1317,7 +1333,7 @@ const RegistrationPage = () => {
 
           {/* Tyre Requirement Question */}
           <div className="mb-8">
-            <label className="block text-lg font-semibold text-gray-800 mb-4">
+            <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-4">
               Do you require tyres? <span className="text-red-500">(Required)</span>
             </label>
               {errors.requiresTyres && (
@@ -1356,12 +1372,12 @@ const RegistrationPage = () => {
           {/* Tyre Size Section - Only show when YES is selected */}
           {formData.requiresTyres === 'yes' && (
             <div className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">TYRE SIZE</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">TYRE SIZE</h2>
               
               {/* Front Tyre Size */}
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">FRONT TYRE SIZE</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Width <span className="text-red-500">(Required)</span>
@@ -1423,7 +1439,7 @@ const RegistrationPage = () => {
               {/* Rear Tyre Size */}
               <div className="mb-8">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">REAR TYRE SIZE</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Width <span className="text-red-500">(Required)</span>
@@ -1483,7 +1499,7 @@ const RegistrationPage = () => {
 
               {/* Preferred Brands */}
               <div className="mb-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                       Preferred Tyre Brand & Model <span className="text-red-500">(Required)</span>
@@ -1560,7 +1576,7 @@ const RegistrationPage = () => {
           {/* Tyre Management Section - Only show when YES is selected */}
           {formData.requiresTyres === 'yes' && (
             <div className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">TYRE MANAGEMENT</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">TYRE MANAGEMENT</h2>
               
               <div className="mb-6">
                 <p className="text-gray-700 mb-4">
@@ -1636,9 +1652,11 @@ const RegistrationPage = () => {
               type="button"
               onClick={() => {
                 setCurrentStep('detailed');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
               }}
-              className="inline-flex items-center px-8 py-4 border-2 border-gray-300 rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 border-2 border-gray-300 rounded-lg sm:rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
             >
               <ArrowLeft className="w-5 h-5 mr-3" />
               PREVIOUS
@@ -1646,9 +1664,9 @@ const RegistrationPage = () => {
             
             <button
               type="submit"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl transition-all duration-300 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg sm:rounded-xl transition-all duration-300 font-bold shadow-md sm:shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
             >
-              <span className="text-lg">NEXT</span>
+              <span className="text-base sm:text-lg">NEXT</span>
               <Star className="w-5 h-5 ml-3" />
             </button>
           </div>
@@ -1678,12 +1696,14 @@ const RegistrationPage = () => {
         <form onSubmit={(e) => {
           e.preventDefault();
           setCurrentStep('maintenance');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
         }}>
           
           {/* Event Information PDF (Step 8 viewer) */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Event Information PDF</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Event Information PDF</h2>
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
               <div className="aspect-[16/9] w-full">
                 <iframe
@@ -1701,7 +1721,7 @@ const RegistrationPage = () => {
 
           {/* Terms and Conditions Section */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Terms and Conditions</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Terms and Conditions</h2>
             <div className="mb-6">
               <label className="flex items-start">
                 <input
@@ -1735,7 +1755,7 @@ const RegistrationPage = () => {
 
           {/* Payment Summary Section */}
           <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Payment Summary</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Payment Summary</h2>
             
             {/* Payment Option */}
             <div className="mb-8">
@@ -1900,9 +1920,11 @@ const RegistrationPage = () => {
               type="button"
               onClick={() => {
                 setCurrentStep('tyre');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
               }}
-              className="inline-flex items-center px-8 py-4 border-2 border-gray-300 rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 border-2 border-gray-300 rounded-lg sm:rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
             >
               <ArrowLeft className="w-5 h-5 mr-3" />
               PREVIOUS
@@ -1910,9 +1932,9 @@ const RegistrationPage = () => {
             
             <button
               type="submit"
-              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-xl transition-all duration-300 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-lg sm:rounded-xl transition-all duration-300 font-bold shadow-md sm:shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-lg w-full sm:w-auto sm:min-w-[180px]"
             >
-              <span className="text-lg">SUBMIT REGISTRATION</span>
+              <span className="text-base sm:text-lg">SUBMIT REGISTRATION</span>
               <Star className="w-5 h-5 ml-3" />
             </button>
           </div>
@@ -1938,7 +1960,7 @@ const RegistrationPage = () => {
       </div>
 
       {/* Maintenance Notice */}
-      <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-2xl p-10 mb-12 shadow-lg">
+      <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-2xl p-6 sm:p-10 mb-8 sm:mb-12 shadow-lg">
         <div className="flex items-start">
           <div className="flex-shrink-0">
             <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
@@ -1950,7 +1972,7 @@ const RegistrationPage = () => {
             <div className="space-y-4 text-orange-700">
               <p className="text-lg">We are currently processing your registration. Your form has been received and saved successfully.</p>
               <p className="text-lg">Our team will review your registration details and contact you within 24-48 hours to complete the registration process.</p>
-              <p className="text-lg font-semibold">Thank you for your patience and understanding.</p>
+              <p className="text-base sm:text-lg font-semibold">Thank you for your patience and understanding.</p>
             </div>
           </div>
         </div>
@@ -1959,14 +1981,14 @@ const RegistrationPage = () => {
       {/* Registration Summary */}
       <div className="bg-white border border-gray-200 rounded-2xl shadow-lg mb-12 overflow-hidden">
         <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-8 py-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-900 text-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 text-center">
             Registration Summary
           </h2>
           <p className="text-gray-600 text-center mt-2">Your submitted information</p>
         </div>
-        <div className="p-10">
+        <div className="p-6 sm:p-10">
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
             <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
               <h3 className="font-bold text-gray-800 mb-4 text-lg flex items-center">
                 <User className="w-5 h-5 mr-2 text-blue-600" />
@@ -2025,7 +2047,9 @@ const RegistrationPage = () => {
           onClick={() => {
             setCurrentStep('pre-form');
             setShowForm(false);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
           }}
           className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white rounded-xl transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 mr-6"
         >
@@ -2054,20 +2078,20 @@ const RegistrationPage = () => {
   );
 
   const renderPersonalDetails = () => (
-    <div className="mb-16">
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-8 border border-blue-200">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center">
-          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+    <div className="mb-12 sm:mb-16">
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 border border-blue-200">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 flex items-center">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-3 sm:mr-4">
             <User className="w-5 h-5 text-white" />
           </div>
           Personal Details
         </h2>
-        <p className="text-gray-600 ml-14">Please provide your personal information</p>
+        <p className="text-gray-600 ml-11 sm:ml-14 text-sm sm:text-base">Please provide your personal information</p>
       </div>
       
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Basic Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className={errors.firstName ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>
              <label className="block text-sm font-semibold text-gray-700 mb-2">
                First Name <span className="text-red-600 italic">(Required)</span>
@@ -2289,7 +2313,7 @@ const RegistrationPage = () => {
         </div>
 
         {/* Address Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className={errors.occupation ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>
              <label className="block text-sm font-semibold text-gray-700 mb-2">
                Occupation <span className="text-red-600 italic">(Required)</span>
@@ -2327,7 +2351,7 @@ const RegistrationPage = () => {
             />
           </div>
           
-          <div className={`lg:col-span-2 ${errors.address ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}`}>
+          <div className={`sm:col-span-2 lg:col-span-2 ${errors.address ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}`}>
              <label className="block text-sm font-semibold text-gray-700 mb-2">
                Street Address <span className="text-red-600 italic">(Required)</span>
              </label>
@@ -2350,7 +2374,7 @@ const RegistrationPage = () => {
             )}
           </div>
           
-          <div className="lg:col-span-2">
+          <div className="sm:col-span-2 lg:col-span-2">
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Street Address Line 2
             </label>
@@ -2443,7 +2467,7 @@ const RegistrationPage = () => {
         </div>
 
         {/* Phone Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className={errors.phonePlatform ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>
              <label className="block text-sm font-semibold text-gray-700 mb-2">
                Phone Platform <span className="text-red-600 italic">(Required)</span>
@@ -2521,22 +2545,22 @@ const RegistrationPage = () => {
   );
 
   const renderEmergencyContacts = () => (
-    <div className="mb-16">
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 mb-8 border border-green-200">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center">
-          <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center mr-4">
+    <div className="mb-12 sm:mb-16">
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 border border-green-200">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 flex items-center">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-600 rounded-lg flex items-center justify-center mr-3 sm:mr-4">
             <Phone className="w-5 h-5 text-white" />
           </div>
           Emergency Contact Details
         </h2>
-        <p className="text-gray-600 ml-14">Please provide emergency contact information</p>
+        <p className="text-gray-600 ml-11 sm:ml-14 text-sm sm:text-base">Please provide emergency contact information</p>
       </div>
       
-      <div className="space-y-8">
+      <div className="space-y-6 sm:space-y-8">
         {/* Emergency Contact 1 */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Next of Kin / Emergency Contact 1</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">Next of Kin / Emergency Contact 1</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <div className={errors['emergency1.firstName'] ? 'ring-2 ring-red-200 rounded-lg p-2 bg-red-50/30' : ''}>
                <label className="block text-sm font-semibold text-gray-700 mb-2">
                  NOK1 First Name <span className="text-red-600 italic">(Required)</span>
@@ -2693,18 +2717,18 @@ const RegistrationPage = () => {
   );
 
   const renderMedicalInfo = () => (
-    <div className="mb-16">
-      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-6 mb-8 border border-purple-200">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center">
-          <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
+    <div className="mb-12 sm:mb-16">
+      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 border border-purple-200">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 flex items-center">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-600 rounded-lg flex items-center justify-center mr-3 sm:mr-4">
             <Shield className="w-5 h-5 text-white" />
           </div>
           Medical Information
         </h2>
-        <p className="text-gray-600 ml-14">Please provide your medical information for safety purposes</p>
+        <p className="text-gray-600 ml-11 sm:ml-14 text-sm sm:text-base">Please provide your medical information for safety purposes</p>
       </div>
       
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         <div>
           {renderRadioGroup('medicalCondition', 'Do you suffer a medical condition we need to know about?', [
             { value: 'yes', label: 'Yes' },
@@ -2816,7 +2840,7 @@ const RegistrationPage = () => {
           placeholder: 'e.g., None, Vegetarian, Vegan, Gluten-free, etc.' 
         }, true)}
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Medicare Number
@@ -2878,7 +2902,7 @@ const RegistrationPage = () => {
         </div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-6 py-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
         {currentStep === 'form' && (
           /* Registration Form - All Sections on One Page */
           <div className="relative bg-white rounded-3xl shadow-2xl border-2 border-gray-200 overflow-hidden">
@@ -2889,7 +2913,7 @@ const RegistrationPage = () => {
             <div className="absolute top-6 right-6 w-12 h-12 bg-blue-100 rounded-full opacity-50"></div>
             <div className="absolute bottom-6 left-6 w-8 h-8 bg-purple-100 rounded-full opacity-50"></div>
             
-            <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 px-12 py-12">
+            <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 px-6 sm:px-12 py-8 sm:py-12">
               {/* Background Pattern */}
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 left-0 w-full h-full" style={{
@@ -2898,21 +2922,21 @@ const RegistrationPage = () => {
               </div>
               
               <div className="relative text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-6 shadow-2xl">
-                  <User className="w-10 h-10 text-white" />
+                <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-4 sm:mb-6 shadow-2xl">
+                  <User className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                 </div>
-                <h2 className="text-4xl font-black text-white mb-4">Registration Form</h2>
-                <p className="text-blue-100 text-xl font-light max-w-2xl mx-auto">Please fill in all required fields to complete your registration and join our program</p>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-3 sm:mb-4">Registration Form</h2>
+                <p className="text-blue-100 text-base sm:text-lg lg:text-xl font-light max-w-2xl mx-auto px-2">Please fill in all required fields to complete your registration and join our program</p>
               </div>
             </div>
-            <form onSubmit={handleSubmit} className="p-12" noValidate>
+            <form onSubmit={handleSubmit} className="p-6 sm:p-8 lg:p-12" noValidate>
               {renderAllFormSections()}
               
               {/* Navigation Buttons */}
-              <div className="flex justify-between mt-16 pt-8 border-t-2 border-gray-200">
+              <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 mt-8 sm:mt-16 pt-4 sm:pt-8 border-t-2 border-gray-200">
                       <Link
                         to="/off-road-training-detail"
-                        className="inline-flex items-center px-8 py-4 border-2 border-gray-300 rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold"
+                        className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 border-2 border-gray-300 rounded-lg sm:rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 font-semibold text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
                       >
                         <ArrowLeft className="w-5 h-5 mr-3" />
                         Back to Training
@@ -2920,9 +2944,9 @@ const RegistrationPage = () => {
                 
                 <button
                   type="submit"
-                  className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl transition-all duration-300 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="inline-flex items-center justify-center px-6 sm:px-10 py-3 sm:py-5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg sm:rounded-xl transition-all duration-300 font-bold shadow-md sm:shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-lg w-full sm:w-auto sm:min-w-[140px]"
                 >
-                  <span className="text-lg">Next</span>
+                  <span className="text-base sm:text-lg">Next</span>
                   <Star className="w-5 h-5 ml-3" />
                 </button>
               </div>
@@ -2947,17 +2971,17 @@ const RegistrationPage = () => {
               <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-purple-600 rounded-full -translate-x-12 -translate-y-12"></div>
             </div>
             
-            <div className="relative p-16 text-center">
+            <div className="relative p-8 sm:p-12 lg:p-16 text-center">
               {/* Icon */}
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl mb-8 shadow-2xl">
-                <Phone className="w-10 h-10 text-white" />
+              <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-3xl mb-6 sm:mb-8 shadow-2xl">
+                <Phone className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
               </div>
               
               {/* Heading */}
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">Need Help?</h3>
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Need Help?</h3>
               
               {/* Description */}
-              <p className="text-gray-600 mb-10 max-w-lg mx-auto leading-relaxed text-lg">
+              <p className="text-gray-600 mb-8 sm:mb-10 max-w-lg mx-auto leading-relaxed text-base sm:text-lg">
                 Our experienced team is here to assist you with any questions about registration or the training program.
               </p>
               

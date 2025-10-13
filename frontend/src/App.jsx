@@ -12,7 +12,7 @@ import MotorcycleHirePage from './pages/MotorcycleHirePage';
 import AdventuresPage from './pages/AdventuresPage';
 import EventCalendar2025Page from './pages/EventCalendar2025Page';
 import NZSIEventPage from './pages/NZSIEventPage';
-import NZSIRegistrationForm from './components/nzsi/NZSIRegistrationForm';
+import NZSIRegistrationFormRefactored from './components/nzsi/NZSIRegistrationFormRefactored';
 import Footer from './components/Footer';
 
 const App = () => {
@@ -25,7 +25,7 @@ const App = () => {
           <Route path="/adventures" element={<AdventuresPage />} />
           <Route path="/adventures/2025-event-calendar" element={<EventCalendar2025Page />} />
           <Route path="/adventures/nzsi-2025" element={<NZSIEventPage />} />
-          <Route path="/adventures/nzsi-2025/registration" element={<NZSIRegistrationForm />} />
+          <Route path="/adventures/nzsi-2025/registration" element={<NZSIRegistrationFormRefactored />} />
           <Route path="/hearing-protection" element={<HearingProtectionPage />} />
           <Route path="/training" element={<TrainingPage />} />
           <Route path="/off-road-training-detail" element={<OffRoadTrainingDetailPage />} />

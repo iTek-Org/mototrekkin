@@ -1789,6 +1789,17 @@ const NZSIRegistrationForm = () => {
                   />
                   Hire a Motorcycle
                 </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="hireOption"
+                    value="Use my own motorcycle"
+                    checked={formData.hireOption === 'Use my own motorcycle'}
+                    onChange={handleInputChange}
+                    className="mr-2"
+                  />
+                  Use my own motorcycle
+                </label>
               </div>
               {errors.hireOption && <p className="text-red-500 text-sm mt-1">{errors.hireOption}</p>}
             </div>

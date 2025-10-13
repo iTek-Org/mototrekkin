@@ -371,15 +371,27 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
             />
             Hire a Motorcycle
           </label>
+          <label className="flex items-center">
+            <input
+              type="radio"
+              name="hireOption"
+              value="Use my own motorcycle"
+              checked={formData.hireOption === 'Use my own motorcycle'}
+              onChange={handleInputChange}
+              className="mr-2"
+            />
+            Use my own motorcycle
+          </label>
         </div>
         {errors.hireOption && <p className="text-red-500 text-sm mt-1">{errors.hireOption}</p>}
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-4">Choose which motorbike you wish to hire. (Required)</label>
-        
-        {/* Grid layout for motorcycles - 6 per row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4">
+      {formData.hireOption === 'Hire a Motorcycle' && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-4">Choose which motorbike you wish to hire. (Required)</label>
+          
+          {/* Grid layout for motorcycles - 6 per row */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4">
           {motorcycles.map((bike, index) => (
             <label
               key={index}
@@ -445,20 +457,39 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
               </div>
             </label>
           ))}
+          </div>
+          {errors.selectedMotorcycle && <p className="text-red-500 text-sm mt-2">{errors.selectedMotorcycle}</p>}
         </div>
-        {errors.selectedMotorcycle && <p className="text-red-500 text-sm mt-2">{errors.selectedMotorcycle}</p>}
-      </div>
+      )}
 
-      <div className="bg-gray-50 border-l-4 border-gray-400 p-4">
-        <h4 className="text-lg font-semibold text-gray-800 mb-2">Hire Date:</h4>
-        <div className="text-sm text-gray-700">
-          <p><strong>Collect on:</strong> 8th November 2025</p>
-          <p><strong>Return on:</strong> 15th November 2025</p>
+      {formData.hireOption === 'Hire a Motorcycle' && (
+        <div className="bg-gray-50 border-l-4 border-gray-400 p-4">
+          <h4 className="text-lg font-semibold text-gray-800 mb-2">Hire Date:</h4>
+          <div className="text-sm text-gray-700">
+            <p><strong>Collect on:</strong> 8th November 2025</p>
+            <p><strong>Return on:</strong> 15th November 2025</p>
+          </div>
         </div>
-      </div>
+      )}
+
+      {formData.hireOption === 'Use my own motorcycle' && (
+        <div className="bg-green-50 border-l-4 border-green-400 p-4">
+          <h4 className="text-lg font-semibold text-green-800 mb-2">Using Your Own Motorcycle</h4>
+          <div className="text-sm text-green-700">
+            <p>You have chosen to use your own motorcycle for this event.</p>
+            <p className="mt-2"><strong>Please ensure your motorcycle meets the following requirements:</strong></p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li>Valid registration and insurance</li>
+              <li>Roadworthy condition</li>
+              <li>Appropriate for the terrain and distance</li>
+              <li>All safety equipment in good working order</li>
+            </ul>
+          </div>
+        </div>
+      )}
 
       {/* Selected Bike Image and Specifications */}
-      {getSelectedBikeImage() && (
+      {formData.hireOption === 'Hire a Motorcycle' && getSelectedBikeImage() && (
         <div className="mt-8">
           <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">Selected Motorcycle</h4>
           <div className="flex justify-center">

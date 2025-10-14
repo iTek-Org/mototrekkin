@@ -473,17 +473,201 @@ const Step6 = ({ formData, handleInputChange, errors }) => {
       )}
 
       {formData.hireOption === 'Use my own motorcycle' && (
-        <div className="bg-green-50 border-l-4 border-green-400 p-4">
-          <h4 className="text-lg font-semibold text-green-800 mb-2">Using Your Own Motorcycle</h4>
-          <div className="text-sm text-green-700">
-            <p>You have chosen to use your own motorcycle for this event.</p>
-            <p className="mt-2"><strong>Please ensure your motorcycle meets the following requirements:</strong></p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Valid registration and insurance</li>
-              <li>Roadworthy condition</li>
-              <li>Appropriate for the terrain and distance</li>
-              <li>All safety equipment in good working order</li>
-            </ul>
+        <div className="space-y-6">
+          <div className="bg-green-50 border-l-4 border-green-400 p-4">
+            <h4 className="text-lg font-semibold text-green-800 mb-2">Using Your Own Motorcycle</h4>
+            <p className="text-sm text-green-700">Please provide your motorcycle details below.</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Bike make *</label>
+              <input
+                type="text"
+                name="ownBikeMake"
+                value={formData.ownBikeMake}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              />
+              {errors.ownBikeMake && <p className="text-red-500 text-sm mt-1">{errors.ownBikeMake}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Bike model *</label>
+              <input
+                type="text"
+                name="ownBikeModel"
+                value={formData.ownBikeModel}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              />
+              {errors.ownBikeModel && <p className="text-red-500 text-sm mt-1">{errors.ownBikeModel}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Bike year *</label>
+              <input
+                type="number"
+                name="ownBikeYear"
+                value={formData.ownBikeYear}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              />
+              {errors.ownBikeYear && <p className="text-red-500 text-sm mt-1">{errors.ownBikeYear}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Registration number *</label>
+              <input
+                type="text"
+                name="ownBikeRegistrationNumber"
+                value={formData.ownBikeRegistrationNumber}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              />
+              {errors.ownBikeRegistrationNumber && <p className="text-red-500 text-sm mt-1">{errors.ownBikeRegistrationNumber}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">State/Region *</label>
+              <select
+                name="ownBikeStateOrRegion"
+                value={formData.ownBikeStateOrRegion}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              >
+                <option value="">Select your state/region</option>
+                <option value="AUK">AUK - Auckland</option>
+                <option value="BOP">BOP - Bay of Plenty</option>
+                <option value="CAN">CAN - Canterbury</option>
+                <option value="CIS">CIS - Chatham Islands</option>
+                <option value="HKB">HKB - Hawke's Bay</option>
+                <option value="MWT">MWT - Manawatu-Wanganui</option>
+                <option value="MBH">MBH - Marlborough</option>
+                <option value="NSN">NSN - Nelson</option>
+                <option value="NTL">NTL - Northland</option>
+                <option value="OTA">OTA - Otago</option>
+                <option value="STL">STL - Southland</option>
+                <option value="TKI">TKI - Taranaki</option>
+                <option value="TAS">TAS - Tasman</option>
+                <option value="WKO">WKO - Waikato</option>
+                <option value="WGN">WGN - Wellington</option>
+                <option value="WTC">WTC - West Coast</option>
+              </select>
+              {errors.ownBikeStateOrRegion && <p className="text-red-500 text-sm mt-1">{errors.ownBikeStateOrRegion}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Current odometer reading *</label>
+              <input
+                type="number"
+                name="ownBikeOdometer"
+                value={formData.ownBikeOdometer}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              />
+              {errors.ownBikeOdometer && <p className="text-red-500 text-sm mt-1">{errors.ownBikeOdometer}</p>}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Is your motorcycle service schedule currently up to date? *</label>
+            <div className="flex gap-4">
+              <label className="flex items-center">
+                <input type="radio" name="ownBikeServiceUpToDate" value="Yes" checked={formData.ownBikeServiceUpToDate === 'Yes'} onChange={handleInputChange} className="mr-2" /> Yes
+              </label>
+              <label className="flex items-center">
+                <input type="radio" name="ownBikeServiceUpToDate" value="No" checked={formData.ownBikeServiceUpToDate === 'No'} onChange={handleInputChange} className="mr-2" /> No
+              </label>
+            </div>
+            {errors.ownBikeServiceUpToDate && <p className="text-red-500 text-sm mt-1">{errors.ownBikeServiceUpToDate}</p>}
+          </div>
+
+          {formData.ownBikeServiceUpToDate === 'No' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Will you ensure your bike is serviced in preparation for the adventure? *</label>
+              <div className="flex gap-4">
+                <label className="flex items-center">
+                  <input type="radio" name="ownBikeServiceIntention" value="Yes" checked={formData.ownBikeServiceIntention === 'Yes'} onChange={handleInputChange} className="mr-2" /> Yes
+                </label>
+                <label className="flex items-center">
+                  <input type="radio" name="ownBikeServiceIntention" value="No" checked={formData.ownBikeServiceIntention === 'No'} onChange={handleInputChange} className="mr-2" /> No
+                </label>
+              </div>
+              {errors.ownBikeServiceIntention && <p className="text-red-500 text-sm mt-1">{errors.ownBikeServiceIntention}</p>}
+            </div>
+          )}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Does your bike have any unresolved mechanical issues? *</label>
+            <div className="flex gap-4">
+              <label className="flex items-center">
+                <input type="radio" name="ownBikeHasUnresolvedIssues" value="Yes" checked={formData.ownBikeHasUnresolvedIssues === 'Yes'} onChange={handleInputChange} className="mr-2" /> Yes
+              </label>
+              <label className="flex items-center">
+                <input type="radio" name="ownBikeHasUnresolvedIssues" value="No" checked={formData.ownBikeHasUnresolvedIssues === 'No'} onChange={handleInputChange} className="mr-2" /> No
+              </label>
+            </div>
+            {errors.ownBikeHasUnresolvedIssues && <p className="text-red-500 text-sm mt-1">{errors.ownBikeHasUnresolvedIssues}</p>}
+          </div>
+
+          {formData.ownBikeHasUnresolvedIssues === 'Yes' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">If yes, please explain *</label>
+              <textarea
+                name="ownBikeIssuesDetails"
+                value={formData.ownBikeIssuesDetails}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                rows={4}
+              />
+              {errors.ownBikeIssuesDetails && <p className="text-red-500 text-sm mt-1">{errors.ownBikeIssuesDetails}</p>}
+            </div>
+          )}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Does your motorcycle have full comprehensive insurance? *</label>
+            <div className="flex gap-4">
+              <label className="flex items-center">
+                <input type="radio" name="ownBikeHasComprehensiveInsurance" value="Yes" checked={formData.ownBikeHasComprehensiveInsurance === 'Yes'} onChange={handleInputChange} className="mr-2" /> Yes
+              </label>
+              <label className="flex items-center">
+                <input type="radio" name="ownBikeHasComprehensiveInsurance" value="No" checked={formData.ownBikeHasComprehensiveInsurance === 'No'} onChange={handleInputChange} className="mr-2" /> No
+              </label>
+            </div>
+            {errors.ownBikeHasComprehensiveInsurance && <p className="text-red-500 text-sm mt-1">{errors.ownBikeHasComprehensiveInsurance}</p>}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Fuel capacity *</label>
+              <select
+                name="ownBikeFuelCapacity"
+                value={formData.ownBikeFuelCapacity}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              >
+                <option value="">Select capacity</option>
+                {[
+                  '9L','10L','11L','12L','13L','14L','15L','16L','17L','18L','19L','20L','21L','22L','23L','24L','25L','26L','27L','28L','29L','30L','30L+'
+                ].map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+              {errors.ownBikeFuelCapacity && <p className="text-red-500 text-sm mt-1">{errors.ownBikeFuelCapacity}</p>}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Estimated full fuel range *</label>
+              <select
+                name="ownBikeEstimatedRange"
+                value={formData.ownBikeEstimatedRange}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              >
+                <option value="">Select fuel range</option>
+                <option value="100-200">100 - 200</option>
+                <option value="200-300">200 - 300</option>
+                <option value="300-400">300 - 400</option>
+                <option value="400-500">400 - 500</option>
+                <option value="500-600+">500 - 600+</option>
+              </select>
+              {errors.ownBikeEstimatedRange && <p className="text-red-500 text-sm mt-1">{errors.ownBikeEstimatedRange}</p>}
+            </div>
           </div>
         </div>
       )}

@@ -81,6 +81,20 @@ const NZSIRegistrationFormRefactored = () => {
     // Motorcycle Selection
     hireOption: '',
     selectedMotorcycle: '',
+    // Own Motorcycle Details
+    ownBikeMake: '',
+    ownBikeModel: '',
+    ownBikeYear: '',
+    ownBikeRegistrationNumber: '',
+    ownBikeStateOrRegion: '',
+    ownBikeOdometer: '',
+    ownBikeServiceUpToDate: '', // 'Yes' | 'No'
+    ownBikeServiceIntention: '', // required if service not up to date
+    ownBikeHasUnresolvedIssues: '', // 'Yes' | 'No'
+    ownBikeIssuesDetails: '', // required if unresolved issues is Yes
+    ownBikeHasComprehensiveInsurance: '', // 'Yes' | 'No'
+    ownBikeFuelCapacity: '', // e.g., '9L' to '30L+'
+    ownBikeEstimatedRange: '',
     
     // Driver's Licence
     licenceValid: '',
@@ -206,11 +220,28 @@ const NZSIRegistrationFormRefactored = () => {
         break;
         
       case 6: // Motorcycle Selection
-        console.log('Validating step 6 - Motorcycle Selection');
-        console.log('hireOption:', formData.hireOption);
-        console.log('selectedMotorcycle:', formData.selectedMotorcycle);
         if (!formData.hireOption) newErrors.hireOption = 'Hire option is required to select';
-        if (!formData.selectedMotorcycle) newErrors.selectedMotorcycle = 'Motorcycle selection is required';
+        if (formData.hireOption === 'Hire a Motorcycle') {
+          if (!formData.selectedMotorcycle) newErrors.selectedMotorcycle = 'Motorcycle selection is required';
+        } else if (formData.hireOption === 'Use my own motorcycle') {
+          if (!formData.ownBikeMake.trim()) newErrors.ownBikeMake = 'Bike make is required';
+          if (!formData.ownBikeModel.trim()) newErrors.ownBikeModel = 'Bike model is required';
+          if (!formData.ownBikeYear) newErrors.ownBikeYear = 'Bike year is required';
+          if (!formData.ownBikeRegistrationNumber.trim()) newErrors.ownBikeRegistrationNumber = 'Registration number is required';
+          if (!formData.ownBikeStateOrRegion.trim()) newErrors.ownBikeStateOrRegion = 'State/Region is required';
+          if (!formData.ownBikeOdometer) newErrors.ownBikeOdometer = 'Odometer reading is required';
+          if (!formData.ownBikeServiceUpToDate) newErrors.ownBikeServiceUpToDate = 'Service schedule question is required';
+          if (formData.ownBikeServiceUpToDate === 'No' && !formData.ownBikeServiceIntention) {
+            newErrors.ownBikeServiceIntention = 'Please confirm your intention to service the bike';
+          }
+          if (!formData.ownBikeHasUnresolvedIssues) newErrors.ownBikeHasUnresolvedIssues = 'Unresolved issues question is required';
+          if (formData.ownBikeHasUnresolvedIssues === 'Yes' && !formData.ownBikeIssuesDetails.trim()) {
+            newErrors.ownBikeIssuesDetails = 'Please explain the mechanical issues';
+          }
+          if (!formData.ownBikeHasComprehensiveInsurance) newErrors.ownBikeHasComprehensiveInsurance = 'Insurance question is required';
+          if (!formData.ownBikeFuelCapacity) newErrors.ownBikeFuelCapacity = 'Fuel capacity is required';
+          if (!formData.ownBikeEstimatedRange) newErrors.ownBikeEstimatedRange = 'Estimated full fuel range is required';
+        }
         break;
         
       case 7: // Driver's Licence Details

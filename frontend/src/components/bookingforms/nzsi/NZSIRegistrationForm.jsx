@@ -159,8 +159,8 @@ const NZSIRegistrationForm = () => {
     { 
       name: 'BMW R1250GS ADV', 
       price: 0, 
-      available: false, 
-      remaining: 0, 
+      available: true, 
+      remaining: 1, 
       image: null,
       specs: null
     },

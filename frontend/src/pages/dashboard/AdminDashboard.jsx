@@ -18,6 +18,7 @@ import AdminProducts from "../../components/dashboard/admindashboard/AdminProduc
 import AdminEvents from "../../components/dashboard/admindashboard/AdminEvents";
 import AdminBikeHire from "../../components/dashboard/admindashboard/AdminBikeHire";
 import AdminEventBookings from "../../components/dashboard/admindashboard/AdminEventBookings";
+import AvailableBikes from "../AvailableBikes"
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -29,6 +30,8 @@ const AdminDashboard = () => {
         return <AdminDashboardDefaultData />;
       case "users":
         return <AdminUsers />;
+      case "Bikes":
+        return <AvailableBikes />;
       case "service bookings":
         return <AdminOrders />;
       case "bike hire":
@@ -78,6 +81,7 @@ const AdminDashboard = () => {
             {[
               { name: "dashboard", icon: LayoutDashboard },
               { name: "users", icon: Users },
+               { name: "Bikes", icon: Bike },
               { name: "service bookings", icon: Wrench },
               { name: "bike hire", icon: Bike },
               { name: "event bookings", icon: Bike },

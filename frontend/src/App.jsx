@@ -129,6 +129,8 @@ import NZSIRegistrationFormRefactored from './components/bookingforms/nzsi/NZSIR
 import SuccessPage from './pages/SuccessPage';
 import CancelPage from './pages/CancelPage';
 import ResetPassword from "./pages/ResetPassword";
+import AddBikeForm from './pages/AddBikeForm';
+import AvailableBikes from './pages/AvailableBikes';
 
 
 
@@ -225,7 +227,10 @@ const AppContent = () => {
         />
 
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/add-bike" element={<AddBikeForm />} />
+        <Route path="/a-bike" element={<AvailableBikes />} />
         
+
       </Routes>
 
     

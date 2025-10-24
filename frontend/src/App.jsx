@@ -128,6 +128,7 @@ import ProtectedRoute from '../src/components/ProtectedRoute';
 import NZSIRegistrationFormRefactored from './components/bookingforms/nzsi/NZSIRegistrationFormRefactored';
 import SuccessPage from './pages/SuccessPage';
 import CancelPage from './pages/CancelPage';
+import ResetPassword from "./pages/ResetPassword";
 
 
 
@@ -220,7 +221,10 @@ const AppContent = () => {
       <Route
           path="/cancel"
           element={<CancelPage />}
+        
         />
+
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         
       </Routes>
 
